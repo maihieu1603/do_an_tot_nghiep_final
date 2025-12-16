@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: doantotnghiep
+
+  ai:
+    openai:
+      # 🔑 API Key của bạn (nên đặt trong biến môi trường)
+      api-key: AIzaSyDHH6MUV3H_1SggZBd4xTSUUoQNvPZoBcM
+
+      chat:
+        # 🌐 Endpoint chính của Google Gemini
+        base-url: https://generativelanguage.googleapis.com
+
+        # 🚀 Endpoint tương thích OpenAI cho Gemini
+        completions-path: /v1beta/openai/chat/completions
+
+        options:
+          # 🧠 Model bạn muốn dùng
+          model: gemini-2.0-flash
