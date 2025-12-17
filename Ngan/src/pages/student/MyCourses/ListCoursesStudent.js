@@ -53,24 +53,30 @@ function ListCoursesStudent({ type }) {
 
   return (
     <>
-      <div className="mycourse__body">
-        <Search
-          placeholder="Tìm kiếm khóa học"
-          onSearch={onSearch}
-          style={{ width: 200, marginRight: "10px" }}
-        />
-        Lọc theo
-        <Select
-          defaultValue="all"
-          style={{ width: "200px", marginLeft: "10px" }}
-          onChange={handleChange}
-          options={[
-            { value: "all", label: "Tất cả trình độ" },
-            { value: "fresher", label: "Nền tảng Toeic" },
-            { value: "middle", label: "Toeic trung cấp" },
-            { value: "senior", label: "Toeic chuyên sâu" },
-          ]}
-        />
+      <div className="mycourse__header">
+        <div className="mycourse__header--left">Khóa học của tôi</div>
+
+        <div className="mycourse__header--right">
+          <Search
+            placeholder="Tìm kiếm khóa học"
+            onSearch={onSearch}
+            className="mycourse__search"
+          />
+
+          <div className="mycourse__filter">
+            <span>Lọc theo</span>
+            <Select
+              defaultValue="all"
+              onChange={handleChange}
+              options={[
+                { value: "all", label: "Tất cả trình độ" },
+                { value: "fresher", label: "Nền tảng Toeic" },
+                { value: "middle", label: "Toeic trung cấp" },
+                { value: "senior", label: "Toeic chuyên sâu" },
+              ]}
+            />
+          </div>
+        </div>
       </div>
 
       {/* 0-300 */}
@@ -91,7 +97,14 @@ function ListCoursesStudent({ type }) {
                 <div className="list__content">
                   <Row gutter={[20, 20]}>
                     {item.trackResponse.courses.map((course) => (
-                      <Col span={6}>
+                      <Col
+                        key={course.id}
+                        xs={24} // mobile: 1 cột
+                        sm={12} // tablet nhỏ: 2 cột
+                        md={8} // tablet lớn: 3 cột
+                        lg={6} // desktop: 4 cột
+                        xl={6}
+                      >
                         <CourseItem course={course} />
                       </Col>
                     ))}
@@ -128,7 +141,14 @@ function ListCoursesStudent({ type }) {
                 <div className="list__content">
                   <Row gutter={[20, 20]}>
                     {item.trackResponse.courses.map((course) => (
-                      <Col span={6}>
+                      <Col
+                        key={course.id}
+                        xs={24} // mobile: 1 cột
+                        sm={12} // tablet nhỏ: 2 cột
+                        md={8} // tablet lớn: 3 cột
+                        lg={6} // desktop: 4 cột
+                        xl={6}
+                      >
                         <CourseItem course={course} />
                       </Col>
                     ))}
@@ -158,7 +178,14 @@ function ListCoursesStudent({ type }) {
                 <div className="list__content">
                   <Row gutter={[20, 20]}>
                     {item.trackResponse.courses.map((course) => (
-                      <Col span={6}>
+                      <Col
+                        key={course.id}
+                        xs={24} // mobile: 1 cột
+                        sm={12} // tablet nhỏ: 2 cột
+                        md={8} // tablet lớn: 3 cột
+                        lg={6} // desktop: 4 cột
+                        xl={6}
+                      >
                         <CourseItem course={course} />
                       </Col>
                     ))}
@@ -196,7 +223,14 @@ function ListCoursesStudent({ type }) {
                 <div className="list__content">
                   <Row gutter={[20, 20]}>
                     {item.trackResponse.courses.map((course) => (
-                      <Col span={6}>
+                      <Col
+                        key={course.id}
+                        xs={24} // mobile: 1 cột
+                        sm={12} // tablet nhỏ: 2 cột
+                        md={8} // tablet lớn: 3 cột
+                        lg={6} // desktop: 4 cột
+                        xl={6}
+                      >
                         <CourseItem course={course} />
                       </Col>
                     ))}
@@ -225,7 +259,14 @@ function ListCoursesStudent({ type }) {
                 <div className="list__content">
                   <Row gutter={[20, 20]}>
                     {item.trackResponse.courses.map((course) => (
-                      <Col span={6}>
+                      <Col
+                        key={course.id}
+                        xs={24} // mobile: 1 cột
+                        sm={12} // tablet nhỏ: 2 cột
+                        md={8} // tablet lớn: 3 cột
+                        lg={6} // desktop: 4 cột
+                        xl={6}
+                      >
                         <CourseItem course={course} />
                       </Col>
                     ))}
@@ -262,7 +303,14 @@ function ListCoursesStudent({ type }) {
                 <div className="list__content">
                   <Row gutter={[20, 20]}>
                     {item.trackResponse.courses.map((course) => (
-                      <Col span={6}>
+                      <Col
+                        key={course.id}
+                        xs={24} // mobile: 1 cột
+                        sm={12} // tablet nhỏ: 2 cột
+                        md={8} // tablet lớn: 3 cột
+                        lg={6} // desktop: 4 cột
+                        xl={6}
+                      >
                         <CourseItem course={course} />
                       </Col>
                     ))}

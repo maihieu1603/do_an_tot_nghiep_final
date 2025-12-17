@@ -30,12 +30,7 @@ function CourseDetail() {
         if (retryResponse.code === 200) {
           setCourse(retryResponse.data);
         } else {
-          openNotification(
-            api,
-            "bottomRight",
-            "Lỗi",
-            retryResponse.message
-          );
+          openNotification(api, "bottomRight", "Lỗi", retryResponse.message);
         }
       } else {
         openNotification(
@@ -59,17 +54,29 @@ function CourseDetail() {
       <div className="detail__course">
         <HeaderCourse course={course} />
         <Row gutter={20}>
-          <Col span={16}>
-            <ListLessons role="Student" modules={course?.modules} id={id}/>
+          <Col
+            xs={{ span: 24, order: 2 }} // mobile: xuống dưới
+            sm={{ span: 24, order: 2 }}
+            md={{ span: 16, order: 1 }} // desktop: bên trái
+            lg={{ span: 16, order: 1 }}
+            xl={{ span: 16, order: 1 }}
+          >
+            <ListLessons role="Student" modules={course?.modules} id={id} />
           </Col>
-          <Col span={8}>
+          <Col
+            xs={{ span: 24, order: 1 }} // mobile: lên trên
+            sm={{ span: 24, order: 1 }}
+            md={{ span: 8, order: 2 }} // desktop: sang phải
+            lg={{ span: 8, order: 2 }}
+            xl={{ span: 8, order: 2 }}
+          >
             <div className="right">
               <img
                 src="https://g-static-assets.prepcdn.com/learning-web-app/v20251101.1244-c422471d/imgs/learning-dashboard/topic/star-badge-not-finish.svg"
                 alt="star"
               />
               <div className="font500 right__title">
-                Bạn cần thực hiện 2 nhiệm vụ để hoàn thành khoá học này
+                Bạn cần thực hiện thêm nhiệm vụ để hoàn thành khoá học này
               </div>
               <div className="flex margin15">
                 <div className="font500">Số cúp đã đạt</div>
@@ -83,10 +90,6 @@ function CourseDetail() {
             </div>
           </Col>
         </Row>
-
-        <div className="back">
-          <GoBack />
-        </div>
       </div>
     </>
   );

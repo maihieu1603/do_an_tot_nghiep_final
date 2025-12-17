@@ -120,3 +120,60 @@
   }
 }
 
+.mycourse__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.mycourse__header--left {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.mycourse__header--right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mycourse__search {
+  width: 200px;
+}
+
+.mycourse__filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 📱 Mobile */
+@media (max-width: 768px) {
+  .mycourse__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .mycourse__header--right {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mycourse__search {
+    width: 100%;
+  }
+
+  .mycourse__filter {
+    width: 100%;
+  }
+
+  .mycourse__filter .ant-select {
+    width: 100% !important;
+  }
+}
+
+

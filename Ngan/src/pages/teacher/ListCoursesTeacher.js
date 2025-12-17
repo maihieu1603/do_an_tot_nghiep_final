@@ -62,7 +62,14 @@ function ListCoursesTeacher() {
       <Row gutter={[20, 20]}>
         {courses?.[0]?.courses.length > 0 ? (
           courses[0].courses.map((course) => (
-            <Col span={6}>
+            <Col
+              key={course.id}
+              xs={24} // mobile: 1 cột
+              sm={12} // tablet nhỏ: 2 cột
+              md={8} // tablet lớn: 3 cột
+              lg={6} // desktop: 4 cột
+              xl={6}
+            >
               <CourseItem course={course} />
             </Col>
           ))
@@ -74,7 +81,14 @@ function ListCoursesTeacher() {
       <Row gutter={[20, 20]}>
         {courses?.[1]?.courses.length > 0 ? (
           courses[1].courses.map((course) => (
-            <Col span={6}>
+            <Col
+              key={course.id}
+              xs={24} // mobile: 1 cột
+              sm={12} // tablet nhỏ: 2 cột
+              md={8} // tablet lớn: 3 cột
+              lg={6} // desktop: 4 cột
+              xl={6}
+            >
               <CourseItem course={course} />
             </Col>
           ))
@@ -86,7 +100,14 @@ function ListCoursesTeacher() {
       <Row gutter={[20, 20]}>
         {courses?.[2]?.courses.length > 0 ? (
           courses[2].courses.map((course) => (
-            <Col span={6}>
+            <Col
+              key={course.id}
+              xs={24} // mobile: 1 cột
+              sm={12} // tablet nhỏ: 2 cột
+              md={8} // tablet lớn: 3 cột
+              lg={6} // desktop: 4 cột
+              xl={6}
+            >
               <CourseItem course={course} />
             </Col>
           ))

@@ -1,9 +1,10 @@
-import { Layout } from "antd";
+import { Layout, Grid } from "antd";
 import "./layout.scss";
 import { Outlet, useLocation } from "react-router-dom";
 import MenuSiderStudent from "../components/MenuSiderStudent";
 import { useState } from "react";
 import HeaderCommon from "../components/Header";
+const { useBreakpoint } = Grid;
 const { Header, Content, Sider } = Layout;
 function LayoutStudent() {
   const location = useLocation();
@@ -38,7 +39,11 @@ function LayoutStudent() {
               collapsible
               collapsed={collapsed}
               trigger={null}
-              collapsedWidth={0}
+              collapsedWidth={60}
+              breakpoint="md"
+              onBreakpoint={(broken) => {
+                setCollapsed(broken);
+              }}
             >
               <MenuSiderStudent isStudyPlan={isStudyPlan} />
             </Sider>
@@ -48,7 +53,7 @@ function LayoutStudent() {
                   ? "layout__content backgroundStudy"
                   : "layout__content"
               }
-              style={collapsed ? {marginLeft:0} : {marginLeft:"195px"}}
+              style={collapsed ? {marginLeft:60} : {marginLeft:"195px"}}
             >
               <Outlet />
             </Content>

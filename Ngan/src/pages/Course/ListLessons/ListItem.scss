@@ -92,3 +92,64 @@
 .miniTest1:hover{
     cursor: pointer;
 }
+
+/* ===============================
+   RESPONSIVE - BỔ SUNG (FIX)
+   =============================== */
+
+/* 📱 Tablet & Mobile */
+@media (max-width: 768px) {
+
+  /* 🔴 GIỮ 1 HÀNG */
+  .item__header {
+    flex-wrap: nowrap;
+    gap: 12px;
+  }
+
+  /* 🔴 GIỮ STT LUÔN TRÒN */
+  .item__header--stt {
+    width: 56px;
+    height: 56px;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  /* 🔴 MÔ TẢ CO GIÃN */
+  .item__header--des {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* 🔴 TITLE NHỎ LẠI */
+  .item__header--des--title {
+    font-size: 16px;
+    line-height: 1.4;
+    margin-bottom: 6px;
+  }
+
+  /* 🔴 SESSION CÓ THỂ XUỐNG DÒNG */
+  .item__header--des--session {
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 14px;
+  }
+
+  /* 🔴 CUP KHÔNG ÉP XUỐNG HÀNG RIÊNG */
+  .item__header--cup {
+    flex-shrink: 0;
+  }
+}
+
+/* 📱 Mobile nhỏ */
+@media (max-width: 480px) {
+
+  .item__header--stt {
+    width: 48px;
+    height: 48px;
+    font-size: 16px;
+  }
+
+  .item__header--des--session {
+    font-size: 13px;
+  }
+}

@@ -13,6 +13,11 @@ function Account() {
     setLoading(true);
     form.setFieldsValue();
   };
+
+  const getInfo = async() => {
+    
+  }
+
   const items = [
     {
       key: "1",

@@ -1,43 +1,60 @@
 import { Menu } from "antd";
+import {
+  CalendarOutlined,
+  BookOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import { Link, useLocation } from "react-router-dom";
 
 function MenuSiderStudent(props) {
-  const isStudyPlan = props.isStudyPlan;
+  const { isStudyPlan, collapsed } = props;
   const location = useLocation();
+
   const items = [
     {
-      label: <Link to="/student/study_plan">Study Plan</Link>,
       key: "/student/study_plan",
+      icon: <CalendarOutlined />,
+      label: <Link to="/student/study_plan">Study Plan</Link>,
     },
     {
+      key: "/student/my_courses",
+      icon: <BookOutlined />,
       label: (
         <Link
           to="/student/my_courses"
-          style={{ color: isStudyPlan && "white" }}
+          style={{ color: isStudyPlan ? "white" : undefined }}
         >
           My Courses
         </Link>
       ),
-      key: "/student/my_courses",
     },
     {
+      key: "/student/profile",
+      icon: <UserOutlined />,
       label: (
-        <Link to="/student/profile" style={{ color: isStudyPlan && "white" }}>
+        <Link
+          to="/student/profile"
+          style={{ color: isStudyPlan ? "white" : undefined }}
+        >
           Profile
         </Link>
       ),
-      key: "/student/profile",
     },
   ];
+
   return (
-    <>
-      <Menu
-        mode="vertical"
-        items={items}
-        style={{ backgroundColor: isStudyPlan ? "#007bff" : "white" }}
-        selectedKeys={[location.pathname]}
-      />
-    </>
+    <Menu
+      mode="inline"                   // 🔥 bắt buộc để collapse
+      inlineCollapsed={collapsed}     // 🔥 thu = chỉ icon
+      items={items}
+      selectedKeys={[location.pathname]}
+      style={{
+        backgroundColor: isStudyPlan ? "#007bff" : "white",
+        height: "100%",
+        borderRight: "none",
+      }}
+    />
   );
 }
+
 export default MenuSiderStudent;

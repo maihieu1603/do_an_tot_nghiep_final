@@ -3,7 +3,7 @@
     border-radius: 15px;
     background-color: #e3f8f6;
     padding: 0 10px;
-    margin-bottom: 10px;
+    margin: 10px 0;
 
     &__flex{
         display: flex;
@@ -22,6 +22,59 @@
         height: 29px;
     }
 }
+
+/* ===============================
+   RESPONSIVE - BỔ SUNG
+   =============================== */
+
+/* 📱 Tablet & Mobile */
+@media (max-width: 768px) {
+
+  /* 🔴 THÊM */
+  .plan__flex {
+    margin-top: 10px;
+    flex-wrap: wrap;
+    align-items: center;      // không ép bottom
+    height: auto;             // cho phép giãn cao
+    gap: 8px;
+  }
+
+  .col__left-header{
+    flex-wrap: wrap;
+  }
+  .col__left-header--button{
+    margin-top: 10px;
+  }
+
+  /* 🔴 THÊM */
+  .plan__title {
+    font-size: 13px;
+    padding: 4px 10px;
+    height: auto;             // tránh ép chiều cao
+    white-space: nowrap;
+  }
+}
+
+/* 📱 Mobile nhỏ */
+@media (max-width: 480px) {
+
+  /* 🔴 THÊM */
+  .plan__flex {
+    flex-direction: column;   // xếp dọc
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .col__left-header{
+    flex-wrap: wrap;
+  }
+
+  /* 🔴 THÊM */
+  .plan__title {
+    font-size: 12px;
+  }
+}
+
 
 .col__left, .col__right{
     background-color: white;
@@ -57,6 +110,7 @@
 }
 
 .col__right{
+  margin-bottom: 10px;
 
     &--button{
         color:#1a78a4ff;

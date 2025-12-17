@@ -1,18 +1,36 @@
 import { Button, Input, notification } from "antd";
 import { useLocation } from "react-router-dom";
-import { SoundTwoTone } from "@ant-design/icons";
+import { SoundTwoTone, VerticalAlignBottomOutlined } from "@ant-design/icons";
 import { useRef, useState } from "react";
-import { getListSuggest } from "../../services/VocaService";
+import {
+  getListSuggest,
+  getSearchInDictionary,
+  saveStudentDictionary,
+} from "../../services/VocaService";
 import { openNotification } from "../../components/Notification";
 import { AutoComplete } from "antd";
+import { getId } from "../../components/token";
 const { Search } = Input;
 function Dictionary() {
   const location = useLocation();
-  const word = location.state?.word;
   const [api, content] = notification.useNotification();
-  const onSearch = (value) => console.log(value);
 
-  const [value, setValue] = useState("");
+  const [data, setData] = useState(location.state?.data);
+  const onSearch = async (value) => {
+    if (!value) {
+      openNotification(api, "bottomRight", "Lỗi", "Bạn chưa nhập từ");
+    } else {
+      const res = await getSearchInDictionary(value);
+      console.log(res);
+      if (res.code === 200) {
+        setData(res.data);
+      } else {
+        openNotification(api, "bottomRight", "Lỗi", res.message);
+      }
+    }
+  };
+
+  const [value, setValue] = useState(location.state?.word);
   const [options, setOptions] = useState([]);
   const debounceRef = useRef(null);
   // Gọi API suggestion
@@ -51,14 +69,29 @@ function Dictionary() {
 
   const handleSelect = async (word) => {
     console.log("từ: " + word);
-    // console.log("Selected:", word);
+    setValue(word);
+    setOptions([]);
+  };
 
-    // const res = await axios.get(`http://localhost:8080/dictionary`, {
-    //   params: { word },
-    // });
-
-    // console.log("Dictionary detail:", res.data);
-    // // 👉 hiển thị nghĩa, phát âm, ví dụ...
+  const saveDictionary = async (item) => {
+    const form = {
+      studentProfileId: getId(),
+      definitionExampleId: item.id,
+    };
+    const res = await saveStudentDictionary(form);
+    console.log(res);
+    if (res.code === 200) {
+      openNotification(api, "bottomRight", "Thành công", "Lưu từ thành công");
+      const res1 = await getSearchInDictionary(value);
+      console.log(res1);
+      if (res1.code === 200) {
+        setData(res1.data);
+      } else {
+        openNotification(api, "bottomRight", "Lỗi", res.message);
+      }
+    } else {
+      openNotification(api, "bottomRight", "Lỗi", res.message);
+    }
   };
   return (
     <>
@@ -75,48 +108,62 @@ function Dictionary() {
         >
           <Input.Search
             placeholder="Tra từ tại đây"
-            onClick={onSearch}
-            defaultValue={word}
+            onSearch={onSearch}
+            value={value}
           />
         </AutoComplete>
       </div>
-      <div className="nghia">
-        <div className="flex1">
-          <h1 style={{ color: "#0071f9" }}>{word}</h1>
-          <div className="tl">noun</div>
-        </div>
-        <div
-          className="flex1"
-          style={{ borderBottom: "1px solid #ddd", paddingBottom: "10px" }}
-        >
-          <h3 style={{ margin: 0 }}>/ˈfɑː·ðər/</h3>
-          <SoundTwoTone style={{ fontSize: "20px", cursor: "pointer" }} />
-        </div>
 
-        <div className="flex1" style={{ margin: "15px" }}>
-          <div style={{ width: "50%" }}>
-            <div className="flex1">
-              <h3 className="font700_20">một người cha</h3>
-              <Button type="primary">Lưu từ</Button>
-            </div>
+      {data.partsOfSpeech?.map((item) => (
+        <div className="nghia">
+          <div className="flex1">
+            <h1 style={{ color: "#0071f9" }}>{data?.word}</h1>
+            <div className="tl">{item.partOfSpeech}</div>
+          </div>
+          <div
+            className="flex1"
+            style={{ borderBottom: "1px solid #ddd", paddingBottom: "10px" }}
+          >
+            <h3 style={{ margin: 0 }}>/{item.ipa}/</h3>
+            <SoundTwoTone
+              style={{ fontSize: "20px", cursor: "pointer" }}
+              onClick={() => {
+                if (item.audio) {
+                  const audio = new Audio(item.audio);
+                  audio.play();
+                }
+              }}
+            />
+          </div>
 
-            <div className="font20">Ví dụ:</div>
-            <div style={{ paddingLeft: "20px" }}>
-              <div className="font700_16" style={{ marginBottom: "8px" }}>
-                The young child ran to hug his father after school.
+          <div className="flex1" style={{ margin: "15px" }}>
+            <div>
+              <div className="flex1">
+                <h3 className="font700_20">{item.senses[0].definition}</h3>
+                {item.senses[0].saved === false && (
+                  <Button
+                    icon={<VerticalAlignBottomOutlined />}
+                    style={{
+                      padding: "5px",
+                      width: "30px",
+                      height: "30px",
+                      borderRadius: "50%",
+                    }}
+                    onClick={() => saveDictionary(item.senses[0])}
+                  />
+                )}
               </div>
-              <div className="font16">
-                Đứa bé chạy đến ôm bố nó sau khi tan học.
+
+              <div className="font20">Ví dụ:</div>
+              <div style={{ paddingLeft: "20px" }}>
+                <div className="font700_16" style={{ marginBottom: "8px" }}>
+                  {item.senses[0].example}
+                </div>
               </div>
             </div>
           </div>
-          <img
-            src="/images/dad-stress-neurodevelopment-neurosicence.jpg"
-            style={{ width: "45%" }}
-            alt="một người cha"
-          />
         </div>
-      </div>
+      ))}
     </>
   );
 }

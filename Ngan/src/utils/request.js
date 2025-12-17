@@ -1,6 +1,6 @@
 import { getAccessToken} from "../components/token";
 
-export const API_DOMAIN = "http://10.1.1.185:8081/";
+export const API_DOMAIN = "http://172.16.10.27:8081/";
 
 export const get = async (path) => {
     const token = getAccessToken(); 

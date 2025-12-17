@@ -1,13 +1,14 @@
-import { Layout } from "antd";
+import { Layout, Grid } from "antd";
 import "./layout.scss";
 import { Outlet } from "react-router-dom";
 import MenuSiderTeacher from "../components/MenuSiderTeacher";
 import HeaderCommon from "../components/Header";
 import { useState } from "react";
 const { Header, Content, Sider } = Layout;
+const { useBreakpoint } = Grid;
 function LayoutAdmin() {
   const [collapsed, setCollapsed] = useState(false);
-
+  const screens = useBreakpoint();
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
   };
@@ -24,11 +25,15 @@ function LayoutAdmin() {
               collapsible
               collapsed={collapsed}
               trigger={null}
-              collapsedWidth={0}
+              collapsedWidth={60}
+              breakpoint="md"
+              onBreakpoint={(broken) => {
+                setCollapsed(broken);
+              }}
             >
               <MenuSiderTeacher />
             </Sider>
-            <Content className="layout__content" style={collapsed ? {marginLeft:0} : {marginLeft:"195px"}}>
+            <Content className="layout__content" style={collapsed ? {marginLeft:60} : {marginLeft:"195px"}}>
               <Outlet />
             </Content>
           </Layout>

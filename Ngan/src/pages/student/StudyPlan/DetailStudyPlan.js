@@ -191,7 +191,13 @@ function DetailStudyPlan({ setPlan, trackId }) {
     <>
       {context}
       <Row gutter={20}>
-        <Col span={18}>
+        <Col
+          xs={{ span: 24, order: 2 }} // mobile: xuống dưới
+          sm={{ span: 24, order: 2 }}
+          md={{ span: 16, order: 1 }} // desktop: bên trái
+          lg={{ span: 16, order: 1 }}
+          xl={{ span: 16, order: 1 }}
+        >
           <div className="col__left hidden-scrollbar">
             <div className="flex col__left-header">
               <div className="flex1">
@@ -345,6 +351,7 @@ function DetailStudyPlan({ setPlan, trackId }) {
                         >
                           <div className="plan__flex">
                             <div className="flex1">
+                              <div className="plan__title">Buổi {index + 1}</div>
                               <div className="plan__title">
                                 Ngày {item.date}
                               </div>
@@ -386,7 +393,13 @@ function DetailStudyPlan({ setPlan, trackId }) {
             )}
           </div>
         </Col>
-        <Col span={6}>
+        <Col
+          xs={{ span: 24, order: 1 }} // mobile: lên trên
+          sm={{ span: 24, order: 1 }}
+          md={{ span: 8, order: 2 }} // desktop: sang phải
+          lg={{ span: 8, order: 2 }}
+          xl={{ span: 8, order: 2 }}
+        >
           <div className="col__right">
             <div className="flex">
               <h3>Tiến độ học</h3>
@@ -398,13 +411,19 @@ function DetailStudyPlan({ setPlan, trackId }) {
               <div>Số cup đã đạt</div>
               <div className="col__right--font">{info?.soCupDaDat}</div>
             </div>
-            <div className="col__right--item">
+            <div className="flex col__right--item">
               <div>Số Units đạt 2 cúp trở lên</div>
               <div className="col__right--font">{info?.soUnitDat2Cup}</div>
             </div>
             <Progress
-              percent={parseInt(info?.soUnitTheoKeHoach / info?.tongSoUnit * 100)}
-              success={{ percent: parseInt(info?.soUnitDaHoanThanh / info?.tongSoUnit * 100)}}
+              percent={parseInt(
+                (info?.soUnitTheoKeHoach / info?.tongSoUnit) * 100
+              )}
+              success={{
+                percent: parseInt(
+                  (info?.soUnitDaHoanThanh / info?.tongSoUnit) * 100
+                ),
+              }}
             />
             <div className="flex1" style={{ paddingTop: "10px" }}>
               <div
@@ -441,7 +460,10 @@ function DetailStudyPlan({ setPlan, trackId }) {
               </div>
             )}
 
-            <div className="flex col__right--item1" style={{cursor:"pointer"}}>
+            <div
+              className="flex col__right--item1"
+              style={{ cursor: "pointer" }}
+            >
               <div>
                 Bạn có <span style={{ color: "red", fontWeight: 700 }}>01</span>{" "}
                 buổi chưa hoàn thành

@@ -3,25 +3,26 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { openNotification } from "../../components/Notification";
 import { AutoComplete } from "antd";
 import { useRef, useState } from "react";
-import { getListSuggest } from "../../services/VocaService";
+import {
+  getListSuggest,
+  getSearchInDictionary,
+} from "../../services/VocaService";
 const { Search } = Input;
 function TraTu() {
   const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
-  const location = useLocation();
-  const pathClient = location.pathname === "/client/tratu";
-  const onSearch = (value) => {
+  const onSearch = async (value) => {
     if (!value) {
       openNotification(api, "bottomRight", "Lỗi", "Bạn chưa nhập từ");
     } else {
-      if (!pathClient) {
+      const res = await getSearchInDictionary(value);
+      console.log(res);
+      if (res.code === 200) {
         navigate("/home/dictionary", {
-          state: { word: value },
+          state: { word: value, data: res.data },
         });
       } else {
-        navigate("/client/dictionary", {
-          state: { word: value },
-        });
+        openNotification(api, "bottomRight", "Lỗi", res.message);
       }
     }
   };
@@ -65,14 +66,7 @@ function TraTu() {
 
   const handleSelect = async (word) => {
     console.log("từ: " + word);
-    // console.log("Selected:", word);
-
-    // const res = await axios.get(`http://localhost:8080/dictionary`, {
-    //   params: { word },
-    // });
-
-    // console.log("Dictionary detail:", res.data);
-    // // 👉 hiển thị nghĩa, phát âm, ví dụ...
+    setValue(word);
   };
   return (
     <>
@@ -81,7 +75,7 @@ function TraTu() {
         <div className="font64">Tra từ dễ dàng</div>
         <div className="font64">hiểu nghĩa sâu xa</div>
         <div className="font500_22">
-          Prep Dictionary – Vũ trụ từ vựng đa ngôn ngữ trong tầm tay!
+          Dictionary – Vũ trụ từ vựng đa ngôn ngữ trong tầm tay!
         </div>
         <div style={{ marginTop: "15px" }}>
           <AutoComplete
@@ -93,7 +87,11 @@ function TraTu() {
             onSearch={handleSearch}
             onSelect={handleSelect}
           >
-            <Input.Search placeholder="Tra từ tại đây" onSearch={onSearch}/>
+            <Input.Search
+              placeholder="Tra từ tại đây"
+              onSearch={onSearch}
+              value={value}
+            />
           </AutoComplete>
         </div>
       </div>

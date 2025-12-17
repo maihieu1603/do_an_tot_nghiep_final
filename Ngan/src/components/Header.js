@@ -38,7 +38,7 @@ function HeaderCommon({ toggleSidebar }) {
     },
     {
       key: "2",
-      label: <div style={{fontWeight:"500"}} onClick={()=> role === "ADMIN" ? navigate("/admin/account") : navigate("/teacher/account")}>Cài đặt</div>,
+      label: <div style={{fontWeight:"500"}} onClick={()=> role === "ADMIN" ? navigate("/admin/account") : role === "TEACHER" ? navigate("/teacher/account") : navigate("/home/account")}>Cài đặt</div>,
     },
     {
       key: "3",
