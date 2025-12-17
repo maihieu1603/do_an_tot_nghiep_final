@@ -1,21 +1,89 @@
-import { Button, Col, DatePicker, Form, Input, Row, Tabs } from "antd";
-import { useState } from "react";
-
+import {
+  Button,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  notification,
+  Row,
+  Tabs,
+} from "antd";
+import { useEffect, useState } from "react";
+import { getUser, updatePassword, updateUser } from "../../services/AuthService";
+import { openNotification } from "../../components/Notification";
+import { Grid } from "antd";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
 function Account() {
+  const { useBreakpoint } = Grid;
+  const screens = useBreakpoint();
+  const [disable,setDisable] = useState(true);
   const [form] = Form.useForm();
+  const [form1] = Form.useForm();
   const [loading, setLoading] = useState(true);
   const [loadingPass, setLoadingPass] = useState(false);
-  const updateAccount = () => {
-    const value = form.getFieldsValue();
-  };
 
   const cancel = () => {
     setLoading(true);
     form.setFieldsValue();
   };
 
-  const getInfo = async() => {
-    
+  const [api, content] = notification.useNotification();
+
+  const getInfo = async () => {
+    const res = await getUser();
+    console.log(res);
+    if (res.code === 200) {
+      form.setFieldsValue({
+        email: res.data.email,
+        phone: res.data?.phone || "",
+        fullName: res.data?.fullName || "",
+        birthday: res.data?.birthday ? dayjs(res.data?.birthday) : null,
+        address: res.data?.address || ""
+      })
+    } else {
+      openNotification(api, "bottomRight", "Lỗi", res.message);
+    }
+  };
+
+  useEffect(() => {
+    getInfo();
+  }, []);
+
+  const handleUpdate = async() => {
+    setLoading(true);
+    var value=form.getFieldsValue();
+    const data ={
+      ...value,
+      birthday: value.birthday.format("YYYY-MM-DD")
+    }
+    const res = await updateUser(data);
+    console.log(res);
+    if (res.code === 200) {
+      openNotification(api, "bottomRight", "Thông báo", "Lưu thông tin thành công");
+      getInfo();
+      setTimeout(()=>{setLoading(true);setDisable(true);},1000);
+    } else {
+      openNotification(api, "bottomRight", "Lỗi", res.message);
+      setTimeout(()=>{setLoading(false);},1000);
+    }
+  }
+
+  const handleUpdatePass = async() => {
+    setLoadingPass(true);
+    var value=form1.getFieldsValue();
+    console.log(value);
+    const res = await updatePassword(value);
+    console.log(res);
+    if (res.code === 200) {
+      openNotification(api, "bottomRight", "Thông báo", "Lưu mật khẩu thành công");
+      
+    } else {
+      openNotification(api, "bottomRight", "Lỗi", res.message);
+    }
+    setTimeout(()=>{setLoadingPass(false);},1000);
+    form1.resetFields();
   }
 
   const items = [
@@ -23,12 +91,16 @@ function Account() {
       key: "1",
       label: "Tài khoản",
       children: (
-        <div style={{ padding: "0 80px" }}>
+        <div
+          style={{
+            padding: screens.md ? "0 80px" : "0 16px",
+          }}
+        >
           <Form form={form} layout="vertical">
             <Row gutter={24}>
               <Col span={24}>
                 <Form.Item
-                  name="name"
+                  name="fullName"
                   label="Họ tên"
                   rules={[{ required: true, message: "Không được để trống" }]}
                 >
@@ -56,10 +128,6 @@ function Account() {
                     disabled={loading}
                     size="large"
                     style={{ width: "100%" }}
-                    format={{
-                      format: "YYYY-MM-DD",
-                      type: "mask",
-                    }}
                   />
                 </Form.Item>
               </Col>
@@ -92,14 +160,14 @@ function Account() {
             </Row>
           </Form>
           <div style={{ justifySelf: "center" }}>
-            {loading ? (
-              <Button type="primary" onClick={() => setLoading(false)}>
+            {disable ? (
+              <Button type="primary" onClick={()=>{setDisable(false);setLoading(false)}}>
                 Sửa thông tin
               </Button>
             ) : (
               <div className="flex1">
-                <Button onClick={() => cancel()}>Hủy</Button>
-                <Button type="primary" onClick={() => updateAccount()}>
+                <Button onClick={() => cancel()} disabled={loading}>Hủy</Button>
+                <Button type="primary" onClick={() => handleUpdate()} loading={loading}>
                   Lưu thông tin
                 </Button>
               </div>
@@ -112,12 +180,16 @@ function Account() {
       key: "2",
       label: "Thay đổi mật khẩu",
       children: (
-        <div style={{ padding: "0 80px" }}>
-          <Form form={form} layout="vertical">
+        <div
+          style={{
+            padding: screens.md ? "0 80px" : "0 16px",
+          }}
+        >
+          <Form form={form1} layout="vertical">
             <Row gutter={24}>
               <Col span={24}>
                 <Form.Item
-                  name="name"
+                  name="password"
                   label="Mật khẩu cũ"
                   rules={[{ required: true, message: "Không được để trống" }]}
                 >
@@ -127,7 +199,7 @@ function Account() {
 
               <Col span={24}>
                 <Form.Item
-                  name="email"
+                  name="newPassword"
                   label="Mật khẩu mới"
                   rules={[{ required: true, message: "Không được để trống" }]}
                 >
@@ -137,7 +209,7 @@ function Account() {
 
               <Col span={24}>
                 <Form.Item
-                  name="email"
+                  name="confirmNewPassword"
                   label="Xác nhận mật khẩu"
                   rules={[{ required: true, message: "Không được để trống" }]}
                 >
@@ -147,8 +219,8 @@ function Account() {
             </Row>
           </Form>
           <div style={{ justifySelf: "center" }}>
-            <Button type="primary" onClick={() => setLoadingPass(false)}>
-                Lưu mật khẩu
+            <Button type="primary" onClick={() => handleUpdatePass()} loading={loadingPass}>
+              Lưu mật khẩu
             </Button>
           </div>
         </div>
@@ -156,7 +228,11 @@ function Account() {
     },
   ];
   return (
-    <Tabs defaultActiveKey="1" items={items} className="marginTop50 border" />
+    <>
+    {content}
+    <Tabs defaultActiveKey="1" items={items} className="marginTop50 border"/>
+    </>
+    
   );
 }
 export default Account;

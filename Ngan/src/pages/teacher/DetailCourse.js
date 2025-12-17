@@ -29,12 +29,12 @@ function DetailCourse() {
   const [course, setCourse] = useState();
   const [maxOrder, setMaxOrder] = useState();
   const [form] = Form.useForm();
-  const [version,setVersion] = useState();
+  const [version, setVersion] = useState();
   const fetchApiGetCourse = async (id, version) => {
     console.log(version);
     if (id) {
       setVersion(version);
-      var response=await getDetailCourse(id,version);
+      var response = await getDetailCourse(id, version);
       console.log(response.data);
       if (response.code === 200) {
         setCourse(response.data);
@@ -110,9 +110,18 @@ function DetailCourse() {
     <>
       {contextHolder}
       <div className="detail__course">
-        <HeaderCourse onReload={(courseId, version) => fetchApiGetCourse(courseId, version)} course={course}/>
-        <ListLessons role="Teacher" modules={course?.modules} onReload={() => fetchApiGetCourse(id,version)} status={course?.status}/>
-        {(role === "TEACHER" && (course?.status!== "PUBLISHED"))&& (
+        <HeaderCourse
+          onReload={(courseId, version) => fetchApiGetCourse(courseId, version)}
+          course={course}
+        />
+        <ListLessons
+          role="Teacher"
+          modules={course?.modules}
+          onReload={() => fetchApiGetCourse(id, version)}
+          status={course?.status}
+          track={course?.trackName}
+        />
+        {role === "TEACHER" && course?.status !== "PUBLISHED" && (
           <Tooltip placement="bottom" title="Thêm bài học">
             <Button className="button__create" onClick={showModalLession}>
               +

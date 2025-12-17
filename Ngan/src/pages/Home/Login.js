@@ -1,16 +1,26 @@
-import { Form, Input, Button} from "antd";
+import { Form, Input, Button } from "antd";
 import "./index.scss";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { loginUser } from "../../services/AuthService";
 import { parseJwt } from "../../components/function";
-import { getAccessToken,  getId,  setAccessToken, setId, setRefreshToken } from "../../components/token";
+import {
+  getAccessToken,
+  getId,
+  setAccessToken,
+  setId,
+  setRefreshToken,
+} from "../../components/token";
+import { Modal } from "antd";
+import ForgetPass from "./ForgetPass";
 function Login() {
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [message, setMessage] = useState();
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [openForget, setOpenForget] = useState(false);
+
   const handleLogin = async (values) => {
     setLoading(true);
     setDisabled(true);
@@ -25,13 +35,13 @@ function Login() {
       localStorage.setItem("role", obj.role);
       if (obj.role === "ADMIN") {
         navigate("/admin/teachers");
-      }else if (obj.role === "TEACHER") {
+      } else if (obj.role === "TEACHER") {
         navigate("/teacher/courses");
-      }else if (obj.role === "STUDENT") {
-        if(response.data.firstLogin === false )navigate("/student/my_courses");
-        else navigate("/home/test-in")
+      } else if (obj.role === "STUDENT") {
+        if (response.data.firstLogin === false) navigate("/student/my_courses");
+        else navigate("/home/test-in");
       }
-    }else if (response.code === 1015) {
+    } else if (response.code === 1015) {
       setLoading(false);
       setDisabled(false);
       setMessage("Tài khoản đã bị vô hiệu hóa");
@@ -56,7 +66,7 @@ function Login() {
             <div className="form__login--item">
               <h4 className="form__login--item--title">Tài khoản</h4>
               <Form.Item name="email" className="form__login--input">
-                <Input disabled={disabled}/>
+                <Input disabled={disabled} />
               </Form.Item>
             </div>
             <div className="form__login--item">
@@ -68,11 +78,16 @@ function Login() {
             {message && <div className="errorMessage">{message}</div>}
             <div className="button">
               <Form.Item>
-                <Button htmlType="submit" loading={loading} disabled={disabled}> Đăng nhập</Button>
+                <Button htmlType="submit" loading={loading} disabled={disabled}>
+                  {" "}
+                  Đăng nhập
+                </Button>
               </Form.Item>
             </div>
             <div className="button" style={{ marginTop: "10px" }}>
-              <Button type="link">Quên mật khẩu?</Button>
+              <Button type="link" onClick={() => setOpenForget(true)}>
+                Quên mật khẩu?
+              </Button>
               <Button type="link" onClick={handleClickRegister}>
                 Tạo tài khoản mới?
               </Button>
@@ -80,6 +95,15 @@ function Login() {
           </Form>
         </div>
       </div>
+      <Modal
+        title="Quên mật khẩu"
+        open={openForget}
+        footer={null}
+        maskClosable={false}
+        onCancel={() => setOpenForget(false)}
+      >
+        <ForgetPass onSuccess={() => setOpenForget(false)} />
+      </Modal>
     </>
   );
 }

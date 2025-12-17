@@ -27,6 +27,7 @@ function ListItemTeacher(props) {
   const module = props.module;
   const role = localStorage.getItem("role");
   const status = props.status;
+  const track = props.track;
   const navigation = useNavigate();
   const [ac, setAc] = useState();
   const [acL, setAcL] = useState();
@@ -173,7 +174,7 @@ function ListItemTeacher(props) {
   const handleClickExcercises = (lesson) => {
     if (role === "TEACHER") {
       navigation("/teacher/list-excercises", {
-        state: { lesson, status },
+        state: { lesson, status, track },
       });
     } else {
       navigation("/admin/list-excercises", {

@@ -6,8 +6,9 @@ import MiniTestTeacher from "./MiniTestTeacher";
 function ListLessons(props) {
   const role = props.role;
   const modules = props.modules;
-  const courseId=props.id;
+  const courseId = props.id;
   const status = props.status;
+  const track = props.track;
   return (
     <>
       <div className="list__header">
@@ -23,7 +24,21 @@ function ListLessons(props) {
               <>
                 {modules?.map((module) => (
                   <>
-                    {module.type === "LESSON" ? <ListItemTeacher module={module} onReload={props.onReload} status={status}/> : <MiniTestTeacher module={module} onReload={props.onReload} status={status}/>}
+                    {module.type === "LESSON" ? (
+                      <ListItemTeacher
+                        module={module}
+                        onReload={props.onReload}
+                        status={status}
+                        track={track}
+                      />
+                    ) : (
+                      <MiniTestTeacher
+                        module={module}
+                        onReload={props.onReload}
+                        status={status}
+                        track={track}
+                      />
+                    )}
                   </>
                 ))}
               </>
@@ -37,7 +52,19 @@ function ListLessons(props) {
               <>
                 {modules?.map((module, index) => (
                   <>
-                    {module.type === "LESSON" ? <ListItemStudent module={module} index={index} courseId={courseId}/> : <MiniTestStudent module={module} index={index} courseId={courseId}/>}
+                    {module.type === "LESSON" ? (
+                      <ListItemStudent
+                        module={module}
+                        index={index}
+                        courseId={courseId}
+                      />
+                    ) : (
+                      <MiniTestStudent
+                        module={module}
+                        index={index}
+                        courseId={courseId}
+                      />
+                    )}
                   </>
                 ))}
               </>

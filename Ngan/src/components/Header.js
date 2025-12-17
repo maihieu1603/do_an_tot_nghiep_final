@@ -67,10 +67,6 @@ function HeaderCommon({ toggleSidebar }) {
         </h2>
       </div>
       <div className="flex1">
-        <BellFilled
-          style={{ fontSize: "20px", marginRight: "12px" }}
-          className="cursor"
-        />
         <Dropdown menu={{ items }}>
           <img
             src="https://g-static-assets.prepcdn.com/learning-web-app/v20251101.1244-c422471d/_nuxt/28543647_c422471d_20251101.1244.jpg"

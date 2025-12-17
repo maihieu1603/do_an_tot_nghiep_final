@@ -53,6 +53,7 @@ function ListExcercises() {
   const location = useLocation();
   const lesson = location.state?.lesson || null;
   const status = location.state?.status;
+  const track = location.state?.track;
   const [excercise, setExercise] = useState();
   const [form] = Form.useForm();
   const [selected, setSelected] = useState(null);
@@ -709,49 +710,108 @@ function ListExcercises() {
                     style={{ flex: 1 }}
                     disabled={confirmLoading}
                     onChange={(value) => setSelected(value)}
-                    options={[
-                      { value: "TRUE_FALSE", label: <span>True/False</span> },
-                      {
-                        value: "MULTIPLE_CHOICE",
-                        label: <span>Nhiều câu trả lời</span>,
-                      },
-                      {
-                        value: "FILL_IN_THE_BLANK",
-                        label: <span>Điền từ</span>,
-                      },
-                      {
-                        value: "SINGLE_CHOICE",
-                        label: <span>1 câu trả lời</span>,
-                      },
-                      {
-                        value: "INTERACTIVE",
-                        label: <span>Bài tập tương tác</span>,
-                      },
-                      {
-                        value: "LISTENING_1",
-                        label: <span>Listening Part 1</span>,
-                      },
-                      {
-                        value: "LISTENING_2",
-                        label: <span>Listening Part 2</span>,
-                      },
-                      {
-                        value: "LISTENING_3_4",
-                        label: <span>Listening Part 3/4</span>,
-                      },
-                      {
-                        value: "READING_5",
-                        label: <span>Reading Part 5</span>,
-                      },
-                      {
-                        value: "READING_6",
-                        label: <span>Reading Part 6</span>,
-                      },
-                      {
-                        value: "READING_7",
-                        label: <span>Reading Part 7</span>,
-                      },
-                    ]}
+                    options={
+                      track === "Khóa học nền tảng TOEIC"
+                        ? [
+                            {
+                              value: "TRUE_FALSE",
+                              label: <span>True/False</span>,
+                            },
+                            {
+                              value: "MULTIPLE_CHOICE",
+                              label: <span>Nhiều câu trả lời</span>,
+                            },
+                            {
+                              value: "SINGLE_CHOICE",
+                              label: <span>1 câu trả lời</span>,
+                            },
+                            {
+                              value: "INTERACTIVE",
+                              label: <span>Bài tập tương tác</span>,
+                            },
+                            {
+                              value: "LISTENING_1",
+                              label: <span>Listening Part 1</span>,
+                            },
+                          ]
+                        : track === "Khóa học TOEIC trung cấp"
+                        ? [
+                            {
+                              value: "TRUE_FALSE",
+                              label: <span>True/False</span>,
+                            },
+                            {
+                              value: "MULTIPLE_CHOICE",
+                              label: <span>Nhiều câu trả lời</span>,
+                            },
+                            {
+                              value: "SINGLE_CHOICE",
+                              label: <span>1 câu trả lời</span>,
+                            },
+                            {
+                              value: "INTERACTIVE",
+                              label: <span>Bài tập tương tác</span>,
+                            },
+                            {
+                              value: "LISTENING_1",
+                              label: <span>Listening Part 1</span>,
+                            },
+                            {
+                              value: "LISTENING_2",
+                              label: <span>Listening Part 2</span>,
+                            },
+                            {
+                              value: "READING_5",
+                              label: <span>Reading Part 5</span>,
+                            },
+                            {
+                              value: "READING_6",
+                              label: <span>Reading Part 6</span>,
+                            },
+                          ]
+                        : [
+                            {
+                              value: "TRUE_FALSE",
+                              label: <span>True/False</span>,
+                            },
+                            {
+                              value: "MULTIPLE_CHOICE",
+                              label: <span>Nhiều câu trả lời</span>,
+                            },
+                            {
+                              value: "SINGLE_CHOICE",
+                              label: <span>1 câu trả lời</span>,
+                            },
+                            {
+                              value: "INTERACTIVE",
+                              label: <span>Bài tập tương tác</span>,
+                            },
+                            {
+                              value: "LISTENING_1",
+                              label: <span>Listening Part 1</span>,
+                            },
+                            {
+                              value: "LISTENING_2",
+                              label: <span>Listening Part 2</span>,
+                            },
+                            {
+                              value: "LISTENING_3_4",
+                              label: <span>Listening Part 3/4</span>,
+                            },
+                            {
+                              value: "READING_5",
+                              label: <span>Reading Part 5</span>,
+                            },
+                            {
+                              value: "READING_6",
+                              label: <span>Reading Part 6</span>,
+                            },
+                            {
+                              value: "READING_7",
+                              label: <span>Reading Part 7</span>,
+                            },
+                          ]
+                    }
                   />
                 </Form.Item>
               </div>

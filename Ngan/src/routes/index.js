@@ -36,6 +36,7 @@ import ListFirstTestExcercises from "../pages/admin/Test/ListFirstTestExcercises
 import Account from "../pages/Home/Account";
 import CreateDienTu from "../pages/Course/Exercise/CreateDienTu";
 import HomePage from "../pages/Home/HomePage";
+import ForgetPass from "../pages/Home/ForgetPass";
 export const routes = [
     {
         path: "/admin",

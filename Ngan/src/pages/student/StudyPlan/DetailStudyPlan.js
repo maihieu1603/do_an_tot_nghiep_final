@@ -276,26 +276,24 @@ function DetailStudyPlan({ setPlan, trackId }) {
                         </div>
 
                         {list.length === 0 ? (
-                          <div className="week-calendar__empty">
-                            {session?.findIndex((item) => item === key) !==
-                            -1 ? (
-                              <>
-                                <div className="week-calendar__event">
-                                  <div className="week-calendar__event-title">
-                                    Buổi{" "}
-                                    {session?.findIndex(
-                                      (item) => item === key
-                                    ) + 1}
-                                  </div>
-                                  <div className="week-calendar__event-lesson">
-                                    Nghỉ
-                                  </div>
+                          session?.findIndex((item) => item === key) !== -1 ? (
+                            <>
+                              <div className="week-calendar__event">
+                                <div className="week-calendar__event-title">
+                                  Buổi{" "}
+                                  {session?.findIndex((item) => item === key) +
+                                    1}
                                 </div>
-                              </>
-                            ) : (
+                                <div className="week-calendar__event-lesson">
+                                  Nghỉ
+                                </div>
+                              </div>
+                            </>
+                          ) : (
+                            <div className="week-calendar__empty">
                               <div>Ngày trống</div>
-                            )}
-                          </div>
+                            </div>
+                          )
                         ) : (
                           <>
                             <div
@@ -351,7 +349,9 @@ function DetailStudyPlan({ setPlan, trackId }) {
                         >
                           <div className="plan__flex">
                             <div className="flex1">
-                              <div className="plan__title">Buổi {index + 1}</div>
+                              <div className="plan__title">
+                                Buổi {index + 1}
+                              </div>
                               <div className="plan__title">
                                 Ngày {item.date}
                               </div>

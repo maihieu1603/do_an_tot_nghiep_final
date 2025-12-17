@@ -28,18 +28,18 @@ function MenuSiderStudent(props) {
         </Link>
       ),
     },
-    {
-      key: "/student/profile",
-      icon: <UserOutlined />,
-      label: (
-        <Link
-          to="/student/profile"
-          style={{ color: isStudyPlan ? "white" : undefined }}
-        >
-          Profile
-        </Link>
-      ),
-    },
+    // {
+    //   key: "/student/profile",
+    //   icon: <UserOutlined />,
+    //   label: (
+    //     <Link
+    //       to="/student/profile"
+    //       style={{ color: isStudyPlan ? "white" : undefined }}
+    //     >
+    //       Profile
+    //     </Link>
+    //   ),
+    // },
   ];
 
   return (

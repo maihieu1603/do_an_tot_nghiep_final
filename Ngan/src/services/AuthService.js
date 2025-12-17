@@ -1,6 +1,6 @@
 import { parseJwt } from "../components/function";
 import { getRefreshToken, setAccessToken, setRefreshToken } from "../components/token";
-import { check, get, login, post, refresh } from "../utils/request";
+import { check, get, get2, login, put2, refresh } from "../utils/request";
 
 export const loginUser = async(options) => {
     const result = await login("auth/login",options);
@@ -36,17 +36,26 @@ export const checkCodeTeacher = async(option) => {
 export const getUser = async() => {
     const refreshToken = getRefreshToken();
     const obj = parseJwt(refreshToken);
-    console.log(obj);
-    const email=obj.email;
-    const result = await get (`user/${email}`);
+    const email=obj.sub;
+    const result = await get (`users/${email}`);
     return result;
 }
 
-export const updateUser = async() => {
+export const updateUser = async(data) => {
+    const result = await put2(`users`,data);
+    return result;
+}
+
+export const updatePassword = async(data) => {
     const refreshToken = getRefreshToken();
     const obj = parseJwt(refreshToken);
-    console.log(obj);
-    const email=obj.email;
-    const result = await get (`user/${email}`);
+    const email=obj.sub;
+    const value={...data,email};
+    const result = await put2(`users/password`,value);
+    return result;
+}
+
+export const forgetPassword = async(email) => {
+    const result = await get2(`users/forgotPassword/${email}`);
     return result;
 }

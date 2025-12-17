@@ -1,6 +1,6 @@
 import { getAccessToken} from "../components/token";
 
-export const API_DOMAIN = "http://172.16.10.27:8081/";
+export const API_DOMAIN = "http://10.237.245.202:8081/";
 
 export const get = async (path) => {
     const token = getAccessToken(); 
@@ -11,6 +11,22 @@ export const get = async (path) => {
             Accept: "application/json",
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`, 
+        }
+    });
+
+    const result = await response.json();
+    return result;
+};
+
+
+export const get2 = async (path) => {
+    const token = getAccessToken(); 
+
+    const response = await fetch(API_DOMAIN + path, {
+        method: "GET",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
         }
     });
 

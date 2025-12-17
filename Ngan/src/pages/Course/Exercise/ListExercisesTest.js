@@ -625,10 +625,6 @@ function ListExercisesTest() {
                               label: <span>Nhiều câu trả lời</span>,
                             },
                             {
-                              value: "FILL_IN_THE_BLANK",
-                              label: <span>Điền từ</span>,
-                            },
-                            {
                               value: "SINGLE_CHOICE",
                               label: <span>1 câu trả lời</span>,
                             },
