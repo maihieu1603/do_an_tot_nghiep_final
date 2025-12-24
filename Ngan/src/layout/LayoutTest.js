@@ -72,7 +72,7 @@ function LayoutTest() {
   };
   const navigate = useNavigate();
   const handleCancel = () => {
-    navigate(-1);
+    navigate("/home/main")
   };
   const [checkTime,setCheckTime]=useState(false);
   const [time, setTime] = useState(15 * 60);
@@ -185,7 +185,7 @@ function LayoutTest() {
             {result
               ?.filter((item) => item.status === 2)
               .map((item) => (
-                <div className="borderTest" key={item.id}>
+                <div className="borderTest first-item" key={item.id}>
                   <div>Khóa học {item.trackResponse.code} Toeic</div>
                 </div>
               ))}
@@ -199,8 +199,8 @@ function LayoutTest() {
             </h3>
             {result
               ?.filter((item) => item.status !== 2)
-              .map((item) => (
-                <div className="borderTest" key={item.id}>
+              .map((item, index) => (
+                <div className={`borderTest ${index === 0 ? "first-item" : ""}`} key={item.id}>
                   <div>Khóa học {item.trackResponse.code} Toeic</div>
                 </div>
               ))}

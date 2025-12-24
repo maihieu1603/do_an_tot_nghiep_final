@@ -298,7 +298,7 @@ function Test({ onSubmit,checkTime }) {
   };
 
   useEffect(()=>{
-    handleSubmit();
+    if(checkTime === true) handleSubmit();
   },[checkTime])
 
   return (
@@ -585,8 +585,8 @@ function Test({ onSubmit,checkTime }) {
                           }}
                           style={
                             !submit
-                              ? q.answering && { backgroundColor: "#a5ddf7ff" }
-                              : q.answering.isCorrect === true
+                              ? q?.answering && { backgroundColor: "#a5ddf7ff" }
+                              : q?.answering?.isCorrect === true
                               ? { backgroundColor: "#b9fab3ff" }
                               : { backgroundColor: "#fabeb3ff" }
                           }
@@ -641,8 +641,7 @@ function Test({ onSubmit,checkTime }) {
                               ? question.assessmentQuestions[0].answering && {
                                   backgroundColor: "#a5ddf7ff",
                                 }
-                              : question?.assessmentQuestions[0]?.answering
-                                  .isCorrect === true
+                              : question?.assessmentQuestions[0]?.answering?.isCorrect === true
                               ? { backgroundColor: "#b9fab3ff" }
                               : { backgroundColor: "#fabeb3ff" }
                           }
