@@ -24,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -166,6 +167,62 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
         }
     }
+    @Override
+    public void updateInformation(UserRequest userRequest) {
+        UserEntity userEntity = userRepository.findByEmail(userRequest.getEmail()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        userEntity.setFullName(userRequest.getFullName());
+        userEntity.setBirthday(LocalDate.parse(userRequest.getBirthday()));
+        userEntity.setPhone(userRequest.getPhone());
+        userEntity.setAddress(userRequest.getAddress());
+        userRepository.save(userEntity);
+    }
 
+    @Override
+    public void changePassword(UserRequest userRequest) {
+        UserEntity userEntity = userRepository.findByEmail(userRequest.getEmail()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
+        if(passwordEncoder.matches(userEntity.getPassword(), userRequest.getPassword())){
+            throw new AppException(ErrorCode.PASSWORD_NOT_MATCH);
+        }
+
+        if(!userRequest.getNewPassword().equals(userRequest.getConfirmNewPassword())){
+            throw new AppException(ErrorCode.BOTH_NEW_PASS_NOT_MATCH);
+        }
+
+        userEntity.setPassword(passwordEncoder.encode(userRequest.getNewPassword()));
+        userRepository.save(userEntity);
+
+    }
+
+    @Override
+    public UserRespone getUserByEmail(String email) {
+        UserEntity userEntity = userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        UserRespone respone = userConverter.toResponse(userEntity,UserRespone.class);
+        return respone;
+    }
+
+    @Override
+    public void forGotPassword(String email) {
+        UserEntity userEntity = userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        String newPass = PasswordUtil.generateRandomPassword(8);
+        userEntity.setPassword(passwordEncoder.encode(newPass));
+
+        try {
+            DataMailDTO dataMail = new DataMailDTO();
+            dataMail.setTo(userEntity.getEmail());
+            dataMail.setSubject("Mật khẩu của bạn đã được cấp lại!");
+
+            Map<String, Object> props = new HashMap<>();
+            props.put("email", userEntity.getEmail());
+            props.put("newPassword", newPass);
+            props.put("year", LocalDate.now().getYear());
+            dataMail.setProps(props);
+
+            mailService.sendMail(dataMail, "for_got_password_teamplate");
+
+            userRepository.save(userEntity);
+        }catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
 }

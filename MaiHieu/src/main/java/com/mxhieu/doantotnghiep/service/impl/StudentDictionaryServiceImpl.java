@@ -27,13 +27,13 @@ public class StudentDictionaryServiceImpl implements StudentDictionaryService {
     @Override
     public void save(StudentDictionaryRequest studentDictionaryRequest) {
         StudentProfileEntity studentProfile = studentProfileRepository.findById(studentDictionaryRequest.getStudentProfileId()).orElseThrow(()-> new AppException(ErrorCode.STUDENT_PROFILE_NOT_FOUND));
-        DefinitionExampleEntity definitionExample = definitionExampleRepository.findById(studentDictionaryRequest.getStudentProfileId()).orElseThrow(()->new AppException(ErrorCode.DEFINITION_EXAMPLE_NOT_FOUND));
+        DefinitionExampleEntity definitionExample = definitionExampleRepository.findById(studentDictionaryRequest.getDefinitionExampleId()).orElseThrow(()->new AppException(ErrorCode.DEFINITION_EXAMPLE_NOT_FOUND));
         StudentDictionaryEntity studentDictionaryEntity = StudentDictionaryEntity.builder()
                 .studentProfile(studentProfile)
                 .definitionExample(definitionExample)
                 .build();
 
-        definitionExampleRepository.save(definitionExample);
+        studentDictionaryRepository.save(studentDictionaryEntity);
     }
 
     @Override

@@ -65,7 +65,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public CourseResponse getCourseAndModuleByCourseIdByTeacher(CourseRequest courseRequest) {
+    public CourseResponse getCourseAndModuleByCourseIdForTeacher(CourseRequest courseRequest) {
         CourseEntity courseEntity = courseRepository.findById(courseRequest.getId()).orElseThrow(() -> new AppException(ErrorCode.COURSE_NOT_FOUND));
         if(courseRequest.getVersion() != null){
             if(courseEntity.getStatus().equals("PUBLISHED")){
@@ -121,12 +121,22 @@ public class CourseServiceImpl implements CourseService {
                     throw new AppException(ErrorCode.MODULE_LESSON_EMPTY,"Module: " + moduleEntity.getTitle() + " không có bài học nào");
                 }
                 lessonEntities.forEach(lessonEntity -> {
+                    if(lessonEntity.getMediaassets().isEmpty()){
+                        throw new AppException(ErrorCode.LESSON_NOT_HAS_MEDIA,"Module: " +moduleEntity.getTitle() + "\nLesson: " + lessonEntity.getTitle() + "không có video");
+                    }
                     List<ExerciseEntity> exerciseEntities = lessonEntity.getExercises();
                     if(!exerciseEntities.isEmpty()) {
                         exerciseEntities.forEach(exerciseEntity -> {
-                            if (exerciseEntity.getQuestions().isEmpty() || exerciseEntity.getQuestions().size() == 0){
+                            List<QuestionEntity> questionEntities = exerciseEntity.getQuestions();
+                            if (questionEntities.isEmpty()){
                                 throw new AppException(ErrorCode.EXERCISE_QUESTION_EMPTY,"Module: " +moduleEntity.getTitle() + "\nLesson: " + lessonEntity.getTitle() + "\nExercise: " + exerciseEntity.getTitle() + " không có câu hỏi nào");
                             }
+                            questionEntities.forEach(questionEntity -> {
+                                List<ChoiceEntity> choiceEntities = questionEntity.getChoices();
+                                if(choiceEntities.isEmpty()){
+                                    throw new AppException(ErrorCode.QUESSTION_CHOICE_EMPTY,"Module: " +moduleEntity.getTitle() + "\nLesson: " + lessonEntity.getTitle() + "\nExercise: " + exerciseEntity.getTitle() + "\nQuesstion: " + questionEntity.getQuestionText() + " không có lựa chọn nào");
+                                }
+                            });
                         });
                     }
                 });
@@ -139,9 +149,15 @@ public class CourseServiceImpl implements CourseService {
                 List<AssessmentEntity> assessmentEntities = testEntity.getAssessments();
                 if(!assessmentEntities.isEmpty()) {
                     assessmentEntities.forEach(assessmentEntity -> {
-                       if(assessmentEntity.getAssessmentQuestions().isEmpty() || assessmentEntity.getAssessmentQuestions().size() == 0){
+                       if(assessmentEntity.getAssessmentQuestions().isEmpty()){
                            throw new AppException(ErrorCode.ASSESSMENT_QUESSTION_EMPTY,"Module: " +moduleEntity.getTitle() + "\nTest: " + testEntity.getName() + "\nAssessment: " + assessmentEntity.getTitle() + " không có câu hỏi nào");
                        }
+
+                        assessmentEntity.getAssessmentQuestions().forEach(assessmentQuestionEntity -> {
+                            if(assessmentQuestionEntity.getAssessmentOptions().isEmpty()){
+                                throw new AppException(ErrorCode.QUESSTION_CHOICE_EMPTY, "Module: " +moduleEntity.getTitle() + "\nTest: " + testEntity.getName() + "\nAssessment: " + assessmentEntity.getTitle() + "\nAssessmentQuestion: " + assessmentQuestionEntity.getStem() + " không có lựa chọn nào");
+                            }
+                        });
                     });
                 }else{
                     throw new AppException(ErrorCode.ASSESSMENT_OF_TEST_EMPTY,"Module: " + moduleEntity.getTitle() +"\nTest: " + testEntity.getName() + "không có bài tập nào");

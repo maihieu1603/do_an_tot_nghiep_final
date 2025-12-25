@@ -56,7 +56,7 @@ public class AssessmentServiceImpl implements AssessmentService {
     }
 
     @Override
-    public List<AssessmentResponse> getAssessmentsDetailByTestId() {
+    public List<AssessmentResponse> getAssessmentDetailForFistTest() {
         List<TestEntity> testEntities = testRepository.findByType("FIRST_TEST");
 
         if (testEntities.isEmpty()) {

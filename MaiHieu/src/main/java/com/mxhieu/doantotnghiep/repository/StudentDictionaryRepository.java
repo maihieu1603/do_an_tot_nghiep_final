@@ -7,5 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface StudentDictionaryRepository extends JpaRepository<StudentDictionaryEntity, Integer> {
-        List<StudentDictionaryEntity> findByStudentProfile_Id(Integer id);
+    List<StudentDictionaryEntity> findByStudentProfile_Id(Integer id);
+    Boolean existsByStudentProfile_IdAndDefinitionExample_Id(Integer id, Integer definitionEx);
 }

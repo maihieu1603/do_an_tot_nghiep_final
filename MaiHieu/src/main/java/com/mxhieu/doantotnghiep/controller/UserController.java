@@ -59,5 +59,39 @@ public class UserController {
 //        response.setMessage("Tài khoản đã được tạo thành công!");
 //        return response;
 //    }
+@GetMapping("/{email}")
+public ApiResponse getUser(@PathVariable String email) {
+    return ApiResponse.builder()
+            .code(200)
+            .data(userService.getUserByEmail(email))
+            .build();
+}
+
+    @PutMapping()
+    public ApiResponse updateUser(@RequestBody UserRequest user) {
+        userService.updateInformation(user);
+        return ApiResponse.builder()
+                .code(200)
+                .message("Success")
+                .build();
+    }
+
+    @GetMapping("/forgotPassword/{email}")
+    public ApiResponse<?> forGotPass(@PathVariable String email) {
+        userService.forGotPassword(email);
+        return ApiResponse.builder()
+                .code(200)
+                .message("Success")
+                .build();
+    }
+
+    @PutMapping("/password")
+    public  ApiResponse updatePassword(@RequestBody UserRequest user) {
+        userService.changePassword(user);
+        return ApiResponse.builder()
+                .code(200)
+                .message("Success")
+                .build();
+    }
 
 }

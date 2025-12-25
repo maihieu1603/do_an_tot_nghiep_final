@@ -30,6 +30,7 @@ public enum ErrorCode {
     MODULE_TESR_EMPTY(1024, "Module has no test", HttpStatus.BAD_REQUEST),
     EXERCISE_QUESTION_EMPTY(1025, "Exercise has no questions", HttpStatus.BAD_REQUEST),
 
+    BOTH_NEW_PASS_NOT_MATCH(1000,"mật khẩu mới và confirm khong giong nhau" , HttpStatus.BAD_REQUEST),
 
     // 🔽 Thêm 3 error code mới cho upload file
     FILE_NAME_EMPTY(1002, "File name must not be empty", HttpStatus.BAD_REQUEST),
@@ -65,7 +66,8 @@ public enum ErrorCode {
     ASSESSMENT_OF_TEST_EMPTY(1021,"test has not assessment" , HttpStatus.BAD_REQUEST),
     NEXT_NOT_FOUND(1000,"khong tim thay course tiep theo" , HttpStatus.NOT_FOUND),
     LESSON_IS_LOCK(1000,"lesson nay bị khóa" ,HttpStatus.BAD_REQUEST ),
-    DEFINITION_EXAMPLE_NOT_FOUND(1000,"Khong tim thấy nghĩa và ví dụ" ,HttpStatus.NOT_FOUND );
+    DEFINITION_EXAMPLE_NOT_FOUND(1000,"Khong tim thấy nghĩa và ví dụ" ,HttpStatus.NOT_FOUND ),
+    QUESSTION_CHOICE_EMPTY(1000,"câu hỏi không có lựa chọn" , HttpStatus.BAD_REQUEST);
     private final int code;
     private final String message;
     private final HttpStatusCode httpStatusCode;

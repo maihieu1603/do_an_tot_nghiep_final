@@ -14,6 +14,14 @@ public interface UserService {
     void createUser(UserRequest user, String otp);
     UserRespone getMyInfor();
     void createStudent(UserEntity user, String otp);
+
+    void updateInformation(UserRequest user);
+
+    void changePassword(UserRequest user);
+
+    UserRespone getUserByEmail(String email);
+
+    void forGotPassword(String email);
 }
 
 

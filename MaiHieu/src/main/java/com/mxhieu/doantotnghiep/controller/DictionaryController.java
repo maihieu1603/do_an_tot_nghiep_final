@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class DictionaryController {
     private final DictionaryService dictionaryService;
     @GetMapping()
-    public ApiResponse<?> searchInDictionary(@RequestParam String word){
+    public ApiResponse<?> searchInDictionary(@RequestParam String word, @RequestParam Integer studentId) {
         return ApiResponse.builder()
                 .code(200)
-                .data(dictionaryService.search(word))
+                .data(dictionaryService.search(word, studentId))
                 .build();
     }
     @GetMapping("/suggestion")
@@ -29,4 +29,5 @@ public class DictionaryController {
                 .data(dictionaryService.getSuggestionWord(word))
                 .build();
     }
+
 }
