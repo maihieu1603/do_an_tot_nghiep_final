@@ -37,7 +37,8 @@ public class SecurityConfig {
             "/studentprofiles/create",
             "/chunk",
             "/chunk/merge",
-            "/videos/stream"
+            "/videos/stream",
+            "/users/forgotPassword/{email}"
     };
 
     @Bean
