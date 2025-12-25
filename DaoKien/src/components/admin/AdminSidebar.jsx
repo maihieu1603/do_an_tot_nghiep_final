@@ -9,7 +9,7 @@ export default function AdminSidebar() {
         { name: "Questions", icon: <FileText size={20} />, path: "/admin/questionsmanager" },
         { name: "Exams", icon: <FileText size={20} />, path: "/admin/exammanager" },
         { name: "Comments", icon: <FileText size={20} />, path: "/admin/commentmanager" },
-        { name: "Users", icon: <Users size={20} />, path: "/admin/users" },
+        // { name: "Users", icon: <Users size={20} />, path: "/admin/users" },
     ];
 
     return (
