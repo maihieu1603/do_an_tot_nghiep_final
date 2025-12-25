@@ -45,7 +45,7 @@ export default function Profile() {
       const mockUser = {
         ID: 1,
         FullName: "Nguyễn Văn A",
-        Email: "user@example.com",
+        // Email: "user@example.com",
         Sex: "Nam",
         Phone: "0123456789",
         Birthday: "2000-01-01",
