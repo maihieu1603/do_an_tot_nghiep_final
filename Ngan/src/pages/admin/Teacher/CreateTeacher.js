@@ -102,9 +102,9 @@ function CreateTeacher() {
     };
     if (mode === "create") {
       setTeacher(payload);
-      setOpen(true);
       setLoading(true);
       const response = await createTeacher(payload);
+      setTimeout(() => setOpen(true),1000);
       console.log(response);
       if (response.code === 200) {
         setLoading(false);
@@ -365,7 +365,7 @@ function CreateTeacher() {
                   name="fullName"
                   rules={[{ required: true, message: "Vui lòng nhập" }]}
                 >
-                  <Input />
+                  <Input disabled={loading}/>
                 </Form.Item>
               </div>
             </Col>
@@ -417,6 +417,7 @@ function CreateTeacher() {
                 >
                   <DatePicker
                     style={{ width: "100%" }}
+                    disabled={loading}
                   />
                 </Form.Item>
               </div>
@@ -438,7 +439,7 @@ function CreateTeacher() {
                     },
                   ]}
                 >
-                  <Input maxLength={12} disabled={disable} />
+                  <Input maxLength={12} disabled={loading} />
                 </Form.Item>
               </div>
             </Col>
@@ -459,7 +460,7 @@ function CreateTeacher() {
                     },
                   ]}
                 >
-                  <Input maxLength={10} />
+                  <Input maxLength={10} disabled={loading}/>
                 </Form.Item>
               </div>
             </Col>
@@ -527,7 +528,7 @@ function CreateTeacher() {
                   name="address"
                   rules={[{ required: true, message: "Vui lòng nhập" }]}
                 >
-                  <Input />
+                  <Input disabled={loading}/>
                 </Form.Item>
               </div>
             </Col>
@@ -541,7 +542,7 @@ function CreateTeacher() {
                   name="university"
                   rules={[{ required: true, message: "Vui lòng nhập" }]}
                 >
-                  <Input />
+                  <Input disabled={loading}/>
                 </Form.Item>
               </div>
             </Col>
@@ -555,7 +556,7 @@ function CreateTeacher() {
                   name="major"
                   rules={[{ required: true, message: "Vui lòng nhập" }]}
                 >
-                  <Input />
+                  <Input disabled={loading}/>
                 </Form.Item>
               </div>
             </Col>
@@ -569,7 +570,7 @@ function CreateTeacher() {
                   name="graduationYear"
                   rules={[{ required: true, message: "Vui lòng nhập" }]}
                 >
-                  <DatePicker picker="year" style={{ width: "100%" }} />
+                  <DatePicker picker="year" style={{ width: "100%" }} disabled={loading}/>
                 </Form.Item>
               </div>
             </Col>
@@ -583,7 +584,7 @@ function CreateTeacher() {
                   name="degree"
                   rules={[{ required: true, message: "Vui lòng nhập" }]}
                 >
-                  <Input />
+                  <Input disabled={loading}/>
                 </Form.Item>
               </div>
             </Col>
@@ -597,7 +598,7 @@ function CreateTeacher() {
                   name="englishCertificate"
                   rules={[{ required: true, message: "Vui lòng nhập" }]}
                 >
-                  <Input />
+                  <Input disabled={loading}/>
                 </Form.Item>
               </div>
             </Col>
@@ -612,7 +613,7 @@ function CreateTeacher() {
                   name="teachingExperience"
                   rules={[{ required: true, message: "Vui lòng nhập" }]}
                 >
-                  <Input.TextArea />
+                  <Input.TextArea disabled={loading}/>
                 </Form.Item>
               </div>
             </Col>
@@ -631,6 +632,7 @@ function CreateTeacher() {
             <Form.Item>
               <Button
                 htmlType="submit"
+                loading={loading}
                 disabled={!check}
                 style={disable ? { display: "none" } : {}}
               >
@@ -638,6 +640,7 @@ function CreateTeacher() {
               </Button>
               <Button
                 htmlType="submit"
+                loading={loading}
                 style={
                   !disable || teacher.status !== "ACTIVE"
                     ? { display: "none" }

@@ -11,7 +11,7 @@ const { Search } = Input;
 function ListCoursesStudent({ type }) {
   const [select, setSelect] = useState("all");
   const [search, setSearch] = useState();
-  const [listCourse, setListCourse] = useState();
+  const [listCourse, setListCourse] = useState([]);
   const handleChange = (value) => {
     setSelect(value);
   };
@@ -78,7 +78,7 @@ function ListCoursesStudent({ type }) {
           </div>
         </div>
       </div>
-      {listCourse.length === 0 && <h3>Không có khóa học nào! Bạn phải tham gia bài test đầu vào để nhận lộ trình học phù hợp.</h3>}
+      {listCourse?.length === 0 && <h3>Không có khóa học nào! Bạn phải tham gia bài test đầu vào để nhận lộ trình học phù hợp.</h3>}
       {/* 0-300 */}
       {listCourse?.filter(
         (item) => item.status === 2 && item.trackResponse.code === "0-300"
