@@ -84,7 +84,7 @@ public class CourseController {
         return ApiResponse.builder()
                 .code(200)
                 .message("Success")
-                .data(courseService.getCourseAndModuleByCourseIdByTeacher(courseRequest))
+                .data(courseService.getCourseAndModuleByCourseIdForTeacher(courseRequest))
                 .build();
     }
     @GetMapping("/teacher/{teacherId}")

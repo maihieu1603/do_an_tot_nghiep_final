@@ -11,6 +11,7 @@ import com.mxhieu.doantotnghiep.entity.PartOfSpeechEntity;
 import com.mxhieu.doantotnghiep.repository.DefinitionExampleRepository;
 import com.mxhieu.doantotnghiep.repository.DictionaryRepository;
 import com.mxhieu.doantotnghiep.repository.PartOfSpeechRepository;
+import com.mxhieu.doantotnghiep.repository.StudentDictionaryRepository;
 import com.mxhieu.doantotnghiep.service.DictionaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +26,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     private final DictionaryRepository dictionaryRepository;
     private final PartOfSpeechRepository partOfSpeechRepository;
     private final DefinitionExampleRepository definitionExampleRepository;
+    private final StudentDictionaryRepository studentDictionaryRepository;
 
     // API key của Merriam-Webster (lấy từ application.properties)
     @Value("${merriam.api-key}")
@@ -41,12 +43,11 @@ public class DictionaryServiceImpl implements DictionaryService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public DictionaryResponse search(String word) {
+    public DictionaryResponse search(String word, Integer studentId) {
         Optional<DictionaryEntity> existing =
                 dictionaryRepository.findByWord(word);
-
         if (existing.isPresent()) {
-            return mapEntityToResponse(existing.get());
+            return mapEntityToResponse(existing.get(), studentId);
         }
 
 
@@ -233,7 +234,7 @@ public class DictionaryServiceImpl implements DictionaryService {
                     dictionaryRepository.findByWord(word);
 
             if (exist.isPresent()) {
-                return mapEntityToResponse(exist.get());
+                return mapEntityToResponse(exist.get(), studentId);
             }
             // Build response cuối cùng
             return DictionaryResponse.builder()
@@ -254,7 +255,7 @@ public class DictionaryServiceImpl implements DictionaryService {
         return listResponse;
     }
 
-    private DictionaryResponse mapEntityToResponse(DictionaryEntity dictionaryEntity) {
+    private DictionaryResponse mapEntityToResponse(DictionaryEntity dictionaryEntity, Integer studentId) {
 
         // Danh sách PartOfSpeechResponse trả về
         List<PartOfSpeechResponse> partsOfSpeech = new ArrayList<>();
@@ -267,12 +268,13 @@ public class DictionaryServiceImpl implements DictionaryService {
 
             // Duyệt từng DefinitionExampleEntity
             for (DefinitionExampleEntity defEntity : posEntity.getDefinitionExample()) {
-
+                Boolean exist = studentDictionaryRepository.existsByStudentProfile_IdAndDefinitionExample_Id(studentId, defEntity.getId());
                 senses.add(
                         DefinitionAndExampleResponse.builder()
                                 .id(defEntity.getId())
                                 .definition(defEntity.getDefinition())
                                 .example(defEntity.getExample())
+                                .saved(exist)
                                 .build()
                 );
             }

@@ -68,10 +68,10 @@ public class AssessmentController {
     }
 
     @GetMapping("/firsttest")
-    ApiResponse<?> getAssessmentDetailByTestId() {
+    ApiResponse<?> getAssessmentDetailForFistTest() {
         return ApiResponse.builder()
                 .code(200)
-                .data(assessmentService.getAssessmentsDetailByTestId())
+                .data(assessmentService.getAssessmentDetailForFistTest())
                 .build();
 
     }

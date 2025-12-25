@@ -14,4 +14,5 @@ public class DefinitionAndExampleResponse {
     private Integer id;
     private String definition;
     private String example;
+    private Boolean saved;
 }

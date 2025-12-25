@@ -15,7 +15,7 @@ public interface CourseService {
 
     public List<CourseResponse> getCoursesByTeacherId(Integer teacherId);
 
-    CourseResponse getCourseAndModuleByCourseIdByTeacher(CourseRequest courseRequest);
+    CourseResponse getCourseAndModuleByCourseIdForTeacher(CourseRequest courseRequest);
 
     void publishCourse(Integer id);
 

@@ -13,6 +13,6 @@ public interface AssessmentService {
 
     void deleteAssessmentById(Integer id);
 
-    List<AssessmentResponse> getAssessmentsDetailByTestId();
+    List<AssessmentResponse> getAssessmentDetailForFistTest();
     List<AssessmentResponse> getAssessmentsDetailByTestId(int testId);
 }

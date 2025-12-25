@@ -1,5 +1,7 @@
 package com.mxhieu.doantotnghiep.converter;
 
+import com.mxhieu.doantotnghiep.converter.base.BaseConverter;
+import com.mxhieu.doantotnghiep.dto.request.UserRequest;
 import com.mxhieu.doantotnghiep.dto.response.UserRespone;
 import com.mxhieu.doantotnghiep.entity.RoleEntity;
 import com.mxhieu.doantotnghiep.entity.UserEntity;
@@ -10,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class UserConverter {
+public class UserConverter extends BaseConverter<UserEntity, UserRequest,UserRespone> {
     @Autowired
     ModelMapper modelMapper;
 
@@ -21,3 +23,4 @@ public class UserConverter {
     }
 
 }
+

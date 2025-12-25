@@ -15,12 +15,15 @@ public class UserRequest {
     private String email;
     private String password;
     private String fullName;
-    private String satus;
+    private String status;
     private LocalDateTime createAt;
     private String token;
     private String phone;
     private String address;
     private String sex;
-    private String birhday;
+    private String birthday;
     private String role;
+
+    private String newPassword;
+    private String confirmNewPassword;
 }

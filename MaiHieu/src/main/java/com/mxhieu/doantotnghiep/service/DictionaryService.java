@@ -6,7 +6,7 @@ import com.mxhieu.doantotnghiep.entity.DictionaryEntity;
 import java.util.List;
 
 public interface DictionaryService {
-    DictionaryResponse search(String word);
+    DictionaryResponse search(String word, Integer studentId);
 
     List<String> getSuggestionWord(String word);
 }
