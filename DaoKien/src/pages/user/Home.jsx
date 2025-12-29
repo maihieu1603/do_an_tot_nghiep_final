@@ -115,7 +115,7 @@ export default function Home() {
                     Bắt đầu hành trình luyện thi của bạn ngay hôm nay và đạt được điểm số mơ ước!
                 </p>
                 <Link
-                    to="/tests"
+                    to="user/tests"
                     className="bg-white text-blue-700 font-semibold px-8 py-3 rounded-lg hover:bg-gray-100 transition shadow-md"
                 >
                     Vào luyện thi ngay

@@ -30,7 +30,7 @@ import {
 export default function Statistics() {
     const [activeTab, setActiveTab] = useState("listening");
     const [selectedDays, setSelectedDays] = useState("30");
-    const [selectedExamType, setSelectedExamType] = useState("all");
+    const [selectedExamType, setSelectedExamType] = useState("");
     const [results, setResults] = useState([]);
     const [examTypes, setExamTypes] = useState([]);
     const [progress, setProgress] = useState(null);
@@ -46,6 +46,10 @@ export default function Statistics() {
 
     useEffect(() => {
         if (examTypes.length > 0) {
+            // Set default exam type nếu chưa có
+            if (!selectedExamType && examTypes.length > 0) {
+                setSelectedExamType(examTypes[0].Code);
+            }
             fetchAllData();
         }
     }, [selectedDays, selectedExamType, examTypes]);
@@ -64,6 +68,10 @@ export default function Statistics() {
             const data = await response.json();
             if (data.success && data.data) {
                 setExamTypes(data.data);
+                // Set default exam type là type đầu tiên
+                if (data.data.length > 0) {
+                    setSelectedExamType(data.data[0].Code);
+                }
             }
         } catch (err) {
             console.error("Lỗi khi tải loại đề thi:", err);
@@ -123,7 +131,8 @@ export default function Statistics() {
                         finishAt: new Date(attempt.SubmittedAt).toLocaleString("vi-VN"),
                         timeTest,
                         Type: attempt.Type,
-                        examType: attempt.exam?.examType?.Description || "Không rõ",
+                        // examType: attempt.exam?.examType?.Code || "Không rõ",
+                        examType: attempt.exam?.examType.Description || "Không rõ",
                         examTypeCode: attempt.exam?.examType?.Code || "UNKNOWN",
                         examTypeId: attempt.exam?.examType?.ID,
                     };
@@ -202,9 +211,9 @@ export default function Statistics() {
         }
     };
 
-    // Lọc kết quả theo loại đề thi
+    // Lọc kết quả theo loại đề thi (dùng Code)
     const getFilteredResults = () => {
-        if (selectedExamType === "all") {
+        if (!selectedExamType) {
             return results;
         }
         return results.filter(r => r.examTypeCode === selectedExamType);
@@ -354,6 +363,12 @@ export default function Statistics() {
         return <li className="text-gray-700">• {String(progress.weakAreas)}</li>;
     };
 
+    // Tìm tên loại đề đang được chọn
+    const getSelectedExamTypeName = () => {
+        const examType = examTypes.find(type => type.Code === selectedExamType);
+        return examType ? examType.Description : "Loại đề";
+    };
+
     if (loading) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center">
@@ -390,10 +405,9 @@ export default function Statistics() {
                             onChange={(e) => setSelectedExamType(e.target.value)}
                             className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                         >
-                            <option value="all">Tất cả loại đề</option>
                             {examTypes.map((type) => (
                                 <option key={type.ID} value={type.Code}>
-                                    {type.Description}
+                                    {type.Code}
                                 </option>
                             ))}
                         </select>
@@ -417,6 +431,11 @@ export default function Statistics() {
                             Áp dụng
                         </button>
                     </div>
+                    {selectedExamType && (
+                        <p className="text-sm text-gray-600 mt-3">
+                            Đang hiển thị: <strong className="text-blue-700">{getSelectedExamTypeName()}</strong>
+                        </p>
+                    )}
                 </div>
 
                 {/* Thông tin tổng quan */}

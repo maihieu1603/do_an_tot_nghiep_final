@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-// API Configuration
-// const API_DOMAIN = "http://10.237.245.202:8081/";
-export const API_DOMAIN = "http://localhost:8081/";
+const ForgotPasswordPage = () => {
+    const [email, setEmail] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
 
+    // const API_DOMAIN = "http://10.185.176.202:8081/";
+    const API_DOMAIN = "http://localhost:8081/";
 
-// API Service
-const AuthService = {
-    forgotPassword: async (email) => {
+    const forgetPassword = async (email) => {
         try {
             const response = await fetch(API_DOMAIN + `users/forgotPassword/${email}`, {
                 method: "GET",
@@ -16,28 +18,17 @@ const AuthService = {
                     "Content-Type": "application/json",
                 },
             });
-
             const result = await response.json();
             return result;
-        } catch (error) {
-            console.error("Forgot password error:", error);
+        } catch (err) {
+            console.error("Forgot password error:", err);
             return { code: 500, message: "Lỗi kết nối đến server" };
         }
-    }
-};
-
-// Forgot Password Component
-const ForgotPasswordComponent = () => {
-    const [email, setEmail] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
-    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    };
 
     const handleInputChange = (e) => {
         setEmail(e.target.value);
         setError('');
-        setSuccess('');
     };
 
     const handleSubmit = async () => {
@@ -46,7 +37,6 @@ const ForgotPasswordComponent = () => {
             return;
         }
 
-        // Validate email format
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             setError('Email không hợp lệ');
@@ -57,17 +47,16 @@ const ForgotPasswordComponent = () => {
         setError('');
 
         try {
-            const response = await AuthService.forgotPassword(email);
+            const response = await forgetPassword(email);
 
             if (response.code === 200) {
                 setShowSuccessModal(true);
-                setLoading(false);
             } else {
                 setError(response.message || 'Không tìm thấy email trong hệ thống');
-                setLoading(false);
             }
         } catch (err) {
             setError('Đã xảy ra lỗi, vui lòng thử lại');
+        } finally {
             setLoading(false);
         }
     };
@@ -104,14 +93,12 @@ const ForgotPasswordComponent = () => {
                         </label>
                         <input
                             type="email"
-                            name="email"
                             value={email}
                             onChange={handleInputChange}
                             onKeyPress={handleKeyPress}
                             disabled={loading}
                             className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 transition duration-200 disabled:bg-gray-100 disabled:cursor-not-allowed"
                             placeholder="example@email.com"
-                            autoComplete="email"
                             autoFocus
                         />
                     </div>
@@ -167,10 +154,9 @@ const ForgotPasswordComponent = () => {
                 </div>
             </div>
 
-            {/* Success Modal */}
             {showSuccessModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-5">
-                    <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md animate-fade-in">
+                    <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
                         <div className="flex justify-center mb-4">
                             <div className="flex items-center justify-center w-20 h-20 rounded-full bg-green-100">
                                 <svg className="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -213,4 +199,4 @@ const ForgotPasswordComponent = () => {
     );
 };
 
-export default ForgotPasswordComponent;
+export default ForgotPasswordPage;

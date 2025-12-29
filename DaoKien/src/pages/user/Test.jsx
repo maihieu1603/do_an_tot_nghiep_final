@@ -12,6 +12,8 @@ export default function Tests() {
     const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001/api/exam";
     // const STUDENT_TOKEN = import.meta.env.VITE_STUDENT_TOKEN || "";
 
+    const STUDENT_TOKEN = localStorage.getItem("accessToken");
+
     useEffect(() => {
         fetchExams();
     }, []);
@@ -20,7 +22,7 @@ export default function Tests() {
         try {
             setLoading(true);
 
-            const STUDENT_TOKEN = localStorage.getItem("accessToken");
+
 
             const res = await fetch(`${API_URL}/exams`, {
                 headers: {

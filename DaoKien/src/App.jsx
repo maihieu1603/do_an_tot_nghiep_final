@@ -19,6 +19,7 @@ import Result from "./pages/user/Result";
 import Statistic from "./pages/user/Statistics";
 import Profile from "./pages/user/Profile";
 import DoTest from "./pages/user/DoTest";
+import ChangePassword from "./pages/user/ChangePassword "
 
 import Dashboard from "./pages/admin/Dashboard";
 import AdminQuestionManager from "./pages/admin/QuestionManager";
@@ -56,6 +57,7 @@ function App() {
                 <Route path="result/:attemptID" element={<Result />} />
                 <Route path="statistics" element={<Statistic />} />
                 <Route path="profile" element={<Profile />} />
+                <Route path="changepassword" element={<ChangePassword />} />
               </Routes>
             </UserLayout>
           </ProtectedRoute>

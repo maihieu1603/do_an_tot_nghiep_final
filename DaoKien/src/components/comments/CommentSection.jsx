@@ -1,6 +1,7 @@
 // CommentSection.jsx
 import { useState, useMemo, useEffect } from "react";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 import CommentInput from "./CommentInput";
 import CommentItem from "./CommentItem";
@@ -11,17 +12,36 @@ const BASE_URL = "http://localhost:3001/api/exam";
 export default function CommentSection({ examId }) {
     const [flatComments, setFlatComments] = useState([]);
     const [editingComment, setEditingComment] = useState(null);
+    const [studentProfileId, setStudentProfileId] = useState(null);
+
+    const token = localStorage.getItem("accessToken");
+
+    // ✅ Decode token để lấy studentProfileId
+    useEffect(() => {
+        if (token) {
+            try {
+                const decoded = jwtDecode(token);
+                console.log("Decoded token:", decoded);
+
+                // ✅ Lấy id từ token (theo cấu trúc JWT của bạn)
+                const userId = decoded.id; // id = 2 trong token của bạn
+
+                setStudentProfileId(Number(userId));
+                localStorage.setItem("studentProfileID", userId.toString());
+
+                console.log("Student Profile ID:", userId);
+            } catch (err) {
+                console.error("Error decoding token:", err);
+            }
+        }
+    }, [token]);
 
     const fetchComments = async () => {
         try {
-            const token = import.meta.env.VITE_STUDENT_TOKEN;
-
             const res = await axios.get(
                 `${BASE_URL}/comments/exams/${examId}/comments`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-
-            localStorage.setItem("studentProfileID", res.data.data.ID);
 
             setFlatComments(res.data?.data || []);
         } catch (err) {
@@ -56,11 +76,8 @@ export default function CommentSection({ examId }) {
         return roots;
     }, [flatComments]);
 
-    // API thêm comment
     const addComment = async (text, parentId = 0) => {
         try {
-            const token = import.meta.env.VITE_STUDENT_TOKEN;
-
             await axios.post(
                 `${BASE_URL}/comments`,
                 {
@@ -77,11 +94,8 @@ export default function CommentSection({ examId }) {
         }
     };
 
-    // API sửa comment
     const updateComment = async (id, newContent) => {
         try {
-            const token = import.meta.env.VITE_STUDENT_TOKEN;
-
             await axios.put(
                 `${BASE_URL}/comments/${id}`,
                 { Content: newContent },
@@ -95,22 +109,45 @@ export default function CommentSection({ examId }) {
         }
     };
 
-    // API xoá comment
-const deleteComment = async (id) => {
-    if (!confirm("Bạn có chắc muốn xóa bình luận này?")) return;
+    const deleteComment = async (id) => {
+        if (!confirm("Bạn có chắc muốn xóa bình luận này?")) return;
 
-    try {
-        const token = import.meta.env.VITE_STUDENT_TOKEN;
+        if (!studentProfileId) {
+            alert("Không xác định được người dùng. Vui lòng đăng nhập lại!");
+            return;
+        }
 
-        await axios.delete(`${BASE_URL}/comments/${id}`, {
-            headers: { Authorization: `Bearer ${token}` },
-        });
+        try {
+            console.log("Deleting comment:", {
+                commentId: id,
+                studentProfileId
+            });
 
-        fetchComments();
-    } catch (err) {
-        console.error("Delete comment error:", err);
-    }
-};
+            // ✅ Gửi qua query params
+            await axios.delete(
+                `${BASE_URL}/comments/${id}?studentProfileId=${studentProfileId}`,
+                {
+                    headers: { Authorization: `Bearer ${token}` }
+                }
+            );
+
+            alert("Xóa bình luận thành công!");
+            fetchComments();
+        } catch (err) {
+            console.error("Delete comment error:", err);
+            console.error("Error response:", err.response?.data);
+
+            const errorMsg = err.response?.data?.message || err.message;
+
+            if (errorMsg.includes("only delete your own")) {
+                alert("Bạn chỉ có thể xóa bình luận của chính mình!");
+            } else if (errorMsg.includes("not found")) {
+                alert("Không tìm thấy bình luận!");
+            } else {
+                alert(`Lỗi: ${errorMsg}`);
+            }
+        }
+    };
 
     return (
         <div className="mt-12 border rounded-2xl bg-white p-6">
@@ -124,6 +161,7 @@ const deleteComment = async (id) => {
                         onReply={addComment}
                         onEdit={(commentObj) => setEditingComment(commentObj)}
                         onDelete={() => deleteComment(c.ID)}
+                        currentUserId={studentProfileId}
                     />
                 ))}
             </div>

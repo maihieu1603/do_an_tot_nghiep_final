@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 // API Configuration
 // const API_DOMAIN = "http://10.237.245.202:8081/";
@@ -237,12 +238,11 @@ const RegisterComponent = () => {
 
                 <div className="flex items-center justify-center gap-3 mt-6 pt-6 border-t border-gray-200">
                     <span className="text-sm text-gray-600">Bạn đã có tài khoản?</span>
-                    <a
-                        href="/"
+                    <Link to="/login"
                         className="text-sm font-medium text-blue-600 hover:text-blue-700 transition duration-200"
                     >
                         Đăng nhập
-                    </a>
+                    </Link>
                 </div>
             </div>
 

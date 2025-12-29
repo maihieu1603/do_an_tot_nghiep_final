@@ -19,34 +19,54 @@ export default function QuestionContent({
       q => String(q.Media?.Section) === String(p)
     );
     
-    partQuestions.forEach(q => {
+    // QUAN TRỌNG: Sắp xếp theo ID (thứ tự tạo câu hỏi) thay vì OrderIndex
+    // Vì OrderIndex có thể không đáng tin cậy khi admin tạo đề
+    const sortedPartQuestions = [...partQuestions].sort((a, b) => a.ID - b.ID);
+    
+    sortedPartQuestions.forEach(q => {
       questionNumberMap.set(q.ID, globalCounter);
       globalCounter++;
     });
   });
 
-  // Nhóm câu hỏi theo Media ID
+  // Nhóm câu hỏi theo Media ID và sắp xếp theo global number nhỏ nhất
   const groupByMediaId = () => {
     const mediaMap = new Map();
     
     questions.forEach((q) => {
-      // Sử dụng Media.ID làm key để nhóm
       const mediaId = q.Media?.ID || `no-media-${q.ID}`;
       
       if (!mediaMap.has(mediaId)) {
         mediaMap.set(mediaId, {
           media: q.Media,
           questions: [],
-          firstQuestionNumber: questionNumberMap.get(q.ID)
+          minGlobalNumber: Infinity // Lưu global number nhỏ nhất trong nhóm
         });
       }
       
-      mediaMap.get(mediaId).questions.push(q);
+      const group = mediaMap.get(mediaId);
+      group.questions.push(q);
+      
+      // Cập nhật global number nhỏ nhất
+      const globalNum = questionNumberMap.get(q.ID);
+      if (globalNum < group.minGlobalNumber) {
+        group.minGlobalNumber = globalNum;
+      }
     });
     
-    return Array.from(mediaMap.values()).sort(
-      (a, b) => a.firstQuestionNumber - b.firstQuestionNumber
+    // Sắp xếp các nhóm theo global number nhỏ nhất
+    const groups = Array.from(mediaMap.values()).sort(
+      (a, b) => a.minGlobalNumber - b.minGlobalNumber
     );
+    
+    // Sắp xếp câu hỏi trong mỗi nhóm
+    groups.forEach(group => {
+      group.questions.sort(
+        (a, b) => questionNumberMap.get(a.ID) - questionNumberMap.get(b.ID)
+      );
+    });
+    
+    return groups;
   };
 
   const groupedQuestions = groupByMediaId();
@@ -59,10 +79,6 @@ export default function QuestionContent({
       <div className="max-w-6xl mx-auto space-y-8">
         {groupedQuestions.map((group, groupIdx) => {
           const { media, questions: groupQuestions } = group;
-          
-          const sortedQuestions = [...groupQuestions].sort(
-            (a, b) => questionNumberMap.get(a.ID) - questionNumberMap.get(b.ID)
-          );
 
           // Kiểm tra có media không
           const hasMedia = media && (media.AudioUrl || media.ImageUrl || media.Script);
@@ -74,7 +90,7 @@ export default function QuestionContent({
                 isPart5 || !hasMedia ? "" : "flex flex-col lg:flex-row"
               }`}
             >
-              {/* MEDIA BÊN TRÁI (chỉ hiển thị 1 lần cho nhóm câu hỏi) */}
+              {/* MEDIA BÊN TRÁI */}
               {!isPart5 && hasMedia && (
                 <div className="lg:w-2/5 flex-shrink-0 bg-gradient-to-br from-gray-50 to-gray-100 p-6 border-r border-gray-200">
                   <div className="lg:sticky lg:top-6 space-y-4">
@@ -88,9 +104,6 @@ export default function QuestionContent({
                     {/* Script/Passage */}
                     {media.Script && (
                       <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                        {/* <div className="text-xs font-semibold text-gray-500 uppercase mb-2">
-                          Script / Passage
-                        </div> */}
                         <div className="whitespace-pre-line text-gray-800 leading-relaxed">
                           {media.Script}
                         </div>
@@ -127,10 +140,10 @@ export default function QuestionContent({
                 </div>
               )}
 
-              {/* CÂU HỎI BÊN PHẢI - Không giới hạn chiều cao */}
+              {/* CÂU HỎI BÊN PHẢI */}
               <div className={`${isPart5 || !hasMedia ? "w-full" : "flex-1"} p-6`}>
                 <div className="space-y-6">
-                  {sortedQuestions.map((q) => {
+                  {groupQuestions.map((q) => {
                     const questionNumber = questionNumberMap.get(q.ID);
                     const choices = q.Choices || [];
 

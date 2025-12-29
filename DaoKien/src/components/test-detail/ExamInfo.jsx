@@ -9,7 +9,7 @@ export default function ExamInfo({ exam, parts }) {
                 <InfoItem
                     icon={CheckCircle2}
                     label="Loại đề"
-                    value={exam.ExamType?.Description || "Không xác định"}
+                    value={exam.ExamType?.Code || "Không xác định"}
                 />
                 <InfoItem
                     icon={Clock}

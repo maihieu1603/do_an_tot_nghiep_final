@@ -3,11 +3,13 @@ import { useState } from "react";
 import { Reply, ChevronDown, ChevronUp, Pencil } from "lucide-react";
 import ReplyInput from "./ReplyInput";
 
-export default function CommentItem({ comment, onReply, onEdit, onDelete }) {
+export default function CommentItem({ comment, onReply, onEdit, onDelete, currentUserId }) {
     const [showReplyBox, setShowReplyBox] = useState(false);
     const [expanded, setExpanded] = useState(false);
 
-    const loggedInStudentProfileID = Number(localStorage.getItem("studentProfileID"));
+    // ✅ Sử dụng currentUserId từ props thay vì localStorage
+    const commentAuthorID = comment.Author?.ID || comment.StudentProfileID;
+    const isOwner = commentAuthorID === currentUserId;
 
     return (
         <div className="p-4 border rounded-lg bg-white">
@@ -35,21 +37,22 @@ export default function CommentItem({ comment, onReply, onEdit, onDelete }) {
                             <Reply className="w-4 h-4" /> Trả lời
                         </button>
 
-                        {/* ⭐⭐ FIX CHÍNH Ở ĐÂY ⭐⭐ */}
-                        <button
-                            onClick={() => onEdit(comment)}
-                            className="flex items-center gap-1 text-gray-600 hover:text-orange-500"
-                        >
-                            <Pencil className="w-4 h-4" /> Sửa
-                        </button>
+                        {isOwner && (
+                            <>
+                                <button
+                                    onClick={() => onEdit(comment)}
+                                    className="flex items-center gap-1 text-gray-600 hover:text-orange-500"
+                                >
+                                    <Pencil className="w-4 h-4" /> Sửa
+                                </button>
 
-                        {comment.StudentProfileID === loggedInStudentProfileID && (
-                            <button
-                                onClick={onDelete}
-                                className="flex items-center gap-1 text-gray-600 hover:text-red-500"
-                            >
-                                🗑 Xóa
-                            </button>
+                                {/* <button
+                                    onClick={() => onDelete(comment.ID)}
+                                    className="flex items-center gap-1 text-gray-600 hover:text-red-500"
+                                >
+                                    🗑 Xóa
+                                </button> */}
+                            </>
                         )}
 
                         {comment.replies?.length > 0 && (
@@ -83,8 +86,9 @@ export default function CommentItem({ comment, onReply, onEdit, onDelete }) {
                                 <CommentItem
                                     comment={r}
                                     onReply={onReply}
-                                    onEdit={() => onEdit(r)}       // đã đúng
-                                    onDelete={() => onDelete(r.ID)}
+                                    onEdit={onEdit}
+                                    onDelete={onDelete}
+                                    currentUserId={currentUserId}
                                 />
                             </div>
                         ))}
