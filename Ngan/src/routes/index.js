@@ -37,189 +37,211 @@ import Account from "../pages/Home/Account";
 import CreateDienTu from "../pages/Course/Exercise/CreateDienTu";
 import HomePage from "../pages/Home/HomePage";
 import ForgetPass from "../pages/Home/ForgetPass";
+import RequireAuth from "./RequireAuth";
+import RequireRole from "./RequireRole";
 export const routes = [
-    {
-        path: "/admin",
-        element: <LayoutAdmin/>,
+  {
+    path: "/client",
+    element: <LayoutLogin />,
+    children: [
+      {
+        path: "/client/login",
+        element: <Login />,
+      },
+      {
+        path: "/client/register",
+        element: <Register />,
+      },
+      {
+        path: "/client/main",
+        element: <HomePage />,
+      },
+    ],
+  },
+  {
+    element: <RequireAuth />,
+    children: [
+      {
+        element: <RequireRole allow={["ADMIN"]} />,
         children: [
-            {
+          {
+            path: "/admin",
+            element: <LayoutAdmin />,
+            children: [
+              {
                 path: "/admin/teachers",
-                element: <ListTeacher/>
-            },
-            {
+                element: <ListTeacher />,
+              },
+              {
                 path: "/admin/createTeacher",
-                element: <CreateTeacher />
-            },
-            {
+                element: <CreateTeacher />,
+              },
+              {
                 path: "/admin/students",
-                element: <ListStudents />
-            },
-            {
+                element: <ListStudents />,
+              },
+              {
                 path: "/admin/courses",
-                element: <ListCourses />
-            },
-            {
+                element: <ListCourses />,
+              },
+              {
                 path: "/admin/detail-course",
-                element: <DetailCourse />
-            },
-            {
+                element: <DetailCourse />,
+              },
+              {
                 path: "/admin/create-course",
-                element: <CreateCourse />
-            },
-            {
+                element: <CreateCourse />,
+              },
+              {
                 path: "/admin/list-excercises",
-                element: <ListExcercises />
-            },
-            {
+                element: <ListExcercises />,
+              },
+              {
                 path: "/admin/tests",
-                element: <ListTests />
-            },
-            {
+                element: <ListTests />,
+              },
+              {
                 path: "/admin/tests/list-excercises",
-                element: <ListFirstTestExcercises />
-            },
-            {
+                element: <ListFirstTestExcercises />,
+              },
+              {
                 path: "/admin/list-miniTest",
-                element: <ListExercisesTest />
-            },
-            {
+                element: <ListExercisesTest />,
+              },
+              {
                 path: "/admin/account",
-                element: <Account />
-            },
-        ]
-    },
-    {
-        path: "/teacher",
-        element: <LayoutTeacher/>,
+                element: <Account />,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        element: <RequireRole allow={["TEACHER"]} />,
         children: [
-            {
+          {
+            path: "/teacher",
+            element: <LayoutTeacher />,
+            children: [
+              {
                 path: "/teacher/courses",
-                element: <MyCourses />
-            },
-            {
+                element: <MyCourses />,
+              },
+              {
                 path: "/teacher/create-course",
-                element: <CreateCourse />
-            },
-            {
+                element: <CreateCourse />,
+              },
+              {
                 path: "/teacher/detail-course",
-                element: <DetailCourse />
-            },
-            {
+                element: <DetailCourse />,
+              },
+              {
                 path: "/teacher/create-session",
-                element: <CreateSession />
-            },
-            {
+                element: <CreateSession />,
+              },
+              {
                 path: "/teacher/list-excercises",
-                element: <ListExcercises />
-            },
-            {
+                element: <ListExcercises />,
+              },
+              {
                 path: "/teacher/list-miniTest",
-                element: <ListExercisesTest />
-            },
-            {
+                element: <ListExercisesTest />,
+              },
+              {
                 path: "/teacher/account",
-                element: <Account />
-            },
-        ]
-    },
-    {
-        path: "/student",
-        element: <LayoutStudent/>,
+                element: <Account />,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        element: <RequireRole allow={["STUDENT"]} />,
         children: [
-            {
+          {
+            path: "/student",
+            element: <LayoutStudent />,
+            children: [
+              {
                 path: "/student/my_courses",
-                element: <MyCoursesStudent />
-            },
-            {
+                element: <MyCoursesStudent />,
+              },
+              {
                 path: "/student/course-detail",
-                element: <CourseDetail />
-            },
-            {
+                element: <CourseDetail />,
+              },
+              {
                 path: "/student/overview",
-                element: <Overview/>
-            },
-            {
+                element: <Overview />,
+              },
+              {
                 path: "/student/study_plan",
-                element: <StudyPlan />
-            },
-            {
+                element: <StudyPlan />,
+              },
+              {
                 path: "/student/profile",
-                element: <Profile />
-            },
-        ]
-    },
-    {
-        path: "/study",
-        element: <LayoutStudy/>,
-        children: [
-            {
+                element: <Profile />,
+              },
+            ],
+          },
+          {
+            path: "/study",
+            element: <LayoutStudy />,
+            children: [
+              {
                 path: "/study/detail-session",
-                element: <SessionDetail/>
-            },
-            {
+                element: <SessionDetail />,
+              },
+              {
                 path: "/study/mini-test",
-                element: <MiniTestDetail/>
-            },
-        ]
-    },
-    {
-        path: "/exercise",
-        element: <LayoutExcercise/>,
-    },
-    {
-        path: "/test",
-        element: <LayoutTest/>,
-    },
-    {
-        path: "/minitest",
-        element: <LayoutMiniTest/>,
-    },
-    {
-        path: "/home",
-        element: <LayoutHome/>,
-        children: [
-            {
+                element: <MiniTestDetail />,
+              },
+            ],
+          },
+          {
+            path: "/exercise",
+            element: <LayoutExcercise />,
+          },
+          {
+            path: "/test",
+            element: <LayoutTest />,
+          },
+          {
+            path: "/minitest",
+            element: <LayoutMiniTest />,
+          },
+          {
+            path: "/home",
+            element: <LayoutHome />,
+            children: [
+              {
                 path: "/home/test-in",
-                element: <TestIn/>
-            },
-            {
+                element: <TestIn />,
+              },
+              {
                 path: "/home/vocal",
-                element: <Vocal />
-            },
-            {
+                element: <Vocal />,
+              },
+              {
                 path: "/home/tratu",
-                element: <TraTu />
-            },
-            {
+                element: <TraTu />,
+              },
+              {
                 path: "/home/dictionary",
-                element: <Dictionary />
-            },
-            {
+                element: <Dictionary />,
+              },
+              {
                 path: "/home/account",
-                element: <Account />
-            },
-            {
+                element: <Account />,
+              },
+              {
                 path: "/home/main",
-                element: <HomePage />
-            },
-        ]
-    },
-    {
-        path: "/client",
-        element: <LayoutLogin/>,
-        children: [
-            {
-                path: "/client/login",
-                element: <Login/>
-            },
-            {
-                path: "/client/register",
-                element: <Register />
-            },
-            {
-                path: "/client/main",
-                element: <HomePage />
-            },
-        ]
-    },
-]
+                element: <HomePage />,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+];

@@ -169,6 +169,7 @@ function DetailSession({ lessonId, setPercent }) {
     });
   };
 
+  const [per, setPer] = useState(0);
   // ========================
   // VIDEO EVENT
   // ========================
@@ -186,6 +187,7 @@ function DetailSession({ lessonId, setPercent }) {
 
       // Cập nhật %
       if (total && total !== Infinity) {
+        setPer(((current / total) * 100).toFixed(2));
         setPercent(((current / total) * 100).toFixed(2));
       }
 
@@ -262,6 +264,7 @@ function DetailSession({ lessonId, setPercent }) {
     if (response.code === 200) {
       const data = response.data;
       setLesson(data);
+      setPer(data.progressWatched);
 
       // LƯU PATH
       currentVideoPath.current = data.videoPath;
@@ -362,7 +365,7 @@ function DetailSession({ lessonId, setPercent }) {
       )}
 
       {lesson?.hasExercise === true &&
-        lesson?.progressWatched >= lesson?.gatingRules && (
+        (lesson?.progressWatched >= lesson?.gatingRules || per >= lesson?.gatingRules) && (
           <div className="footer-button">
             <Button type="primary" onClick={handleClick}>
               Bắt đầu làm bài

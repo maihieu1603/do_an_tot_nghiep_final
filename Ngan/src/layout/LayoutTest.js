@@ -72,9 +72,9 @@ function LayoutTest() {
   };
   const navigate = useNavigate();
   const handleCancel = () => {
-    navigate("/home/main")
+    navigate("/home/main");
   };
-  const [checkTime,setCheckTime]=useState(false);
+  const [checkTime, setCheckTime] = useState(false);
   const [time, setTime] = useState(15 * 60);
 
   useEffect(() => {
@@ -82,7 +82,7 @@ function LayoutTest() {
       setTime((t) => (t > 0 ? t - 1 : 0));
     }, 1000);
 
-    if(time === 0){
+    if (time === 0) {
       setCheckTime(true);
     }
 
@@ -100,11 +100,12 @@ function LayoutTest() {
       <Layout style={{ minHeight: "100vh" }}>
         <Header className="header">
           <div className="flex1">
-            <Button style={{ backgroundColor: "#ddd" }} onClick={showModal}>
-              <CloseOutlined />
-              <h4>Thoát</h4>
-            </Button>
-            {isSubmitted && (
+            {!isSubmitted ? (
+              <Button style={{ backgroundColor: "#ddd" }} onClick={showModal}>
+                <CloseOutlined />
+                <h4>Thoát</h4>
+              </Button>
+            ) : (
               <Button
                 type="primary"
                 onClick={() => navigate("/student/my_courses")}
@@ -137,7 +138,7 @@ function LayoutTest() {
         <div style={{ display: "flex", flex: 1, marginTop: "60px" }}>
           <Layout>
             <Content className="layout__content2 backgroundStudy">
-              <Test onSubmit={handleSubmitFromChild} checkTime={checkTime}/>
+              <Test onSubmit={handleSubmitFromChild} checkTime={checkTime} />
             </Content>
           </Layout>
         </div>
@@ -175,7 +176,9 @@ function LayoutTest() {
             <>
               <h3>
                 Bạn đang ở trình độ có số điểm tương đương{" "}
-                <span style={{color:"red"}}>{item.trackResponse.code} Toeic</span>
+                <span style={{ color: "red" }}>
+                  {item.trackResponse.code} Toeic
+                </span>
               </h3>
             </>
           ))}
@@ -200,7 +203,10 @@ function LayoutTest() {
             {result
               ?.filter((item) => item.status !== 2)
               .map((item, index) => (
-                <div className={`borderTest ${index === 0 ? "first-item" : ""}`} key={item.id}>
+                <div
+                  className={`borderTest ${index === 0 ? "first-item" : ""}`}
+                  key={item.id}
+                >
                   <div>Khóa học {item.trackResponse.code} Toeic</div>
                 </div>
               ))}
