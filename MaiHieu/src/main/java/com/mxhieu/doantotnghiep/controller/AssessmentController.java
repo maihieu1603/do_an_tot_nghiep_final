@@ -45,7 +45,7 @@ public class AssessmentController {
         return response;
     }
     @GetMapping("/test/{testID}/summary")
-    ApiResponse<?> getSummaryByLessonId(@PathVariable Integer testID) {
+    ApiResponse<?> getSummaryAssessmentsByTestId(@PathVariable Integer testID) {
         return ApiResponse.builder()
                 .code(200)
                 .data(assessmentService.getSummaryAssessmentsByTestId(testID))

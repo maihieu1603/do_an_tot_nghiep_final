@@ -92,6 +92,10 @@ public class EnrollmentServeceImpl implements EnrollmentServece {
             for (CourseEntity courseEntity : parentCourse) {
                 CourseEntity childrenNew = courseRepository.findTopByParentCourse_IdOrderByVersionDesc(courseEntity.getId());
                 if(childrenNew != null){
+                    // lưu tiến độ với các khóa học done
+                    if(status.equals("DONE")){
+                        doneLessonWithDone(childrenNew,studentProfileId);
+                    }
                     // chỉ mở khóa 1 khóa học đầu tiên của track được mở khóa
                     if(status.equals("UNLOCK")){
                         if(checkFirstCouresWillUnlock.get()){
@@ -116,6 +120,35 @@ public class EnrollmentServeceImpl implements EnrollmentServece {
             }
             enrollmentEntity.setEnrollmentCourses(enrollmentCourseEntitys);
         });
+    }
+
+    private void doneLessonWithDone(CourseEntity childrenNew, Integer studentProfileId) {
+        List<ModuleEntity> moduleEntities = moduleRepository.findByCourseIdOrderByOrderIndex(childrenNew.getId());
+        StudentProfileEntity studentProfile = studentProfileRepository.findById(studentProfileId).orElseThrow(() -> new AppException(ErrorCode.STUDENT_PROFILE_NOT_FOUND));
+        for (ModuleEntity moduleEntity : moduleEntities) {
+            if(moduleEntity.getType() == ModuleType.LESSON){
+                List<LessonEntity> lessonEntities = moduleEntity.getLessons();
+                for (LessonEntity lessonEntity : lessonEntities) {
+                    LessonProgressEntity lessonProgressEntity = new LessonProgressEntity();
+                    lessonProgressEntity.setLesson(lessonEntity);
+                    lessonProgressEntity.setStudentProfile(studentProfile);
+                    lessonProgressEntity.setProcess(0); // unlock
+                    lessonProgressEntity.setPercentageWatched(0);
+                    lessonProgressRepository.save(lessonProgressEntity);
+                }
+            }else{
+                List<TestEntity> firstTest = moduleEntity.getTests();
+                if(!firstTest.isEmpty()){
+                    TestProgressEntity firstTestProgressEntity = new TestProgressEntity();
+                    firstTestProgressEntity.setTest(firstTest.get(0));
+                    firstTestProgressEntity.setStudentProfile(studentProfile);
+                    firstTestProgressEntity.setProcess(0);
+                    testProgressRepository.save(firstTestProgressEntity);
+                }else{
+                    throw new AppException(ErrorCode.TEST_NOT_FOUND);
+                }
+            }
+        }
     }
 
     private void unLockFirstLesson(CourseEntity childrenNew, Integer studentProfileId) {
