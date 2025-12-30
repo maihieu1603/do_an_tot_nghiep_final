@@ -49,8 +49,6 @@ public class DictionaryServiceImpl implements DictionaryService {
         if (existing.isPresent()) {
             return mapEntityToResponse(existing.get(), studentId);
         }
-
-
         // Tạo URL gọi API, ví dụ:
         // https://www.dictionaryapi.com/api/v3/references/learners/json/afraid?key=xxx
         String url = BASE_URL + word + "?key=" + apiKey;
@@ -206,8 +204,6 @@ public class DictionaryServiceImpl implements DictionaryService {
                                     }
                                 }
                             }
-
-
                             // ===== CASE 3: ví dụ =====
                             else if ("vis".equals(type) && example == null && dt.get(1).isArray()) {
                                 example = cleanText(
