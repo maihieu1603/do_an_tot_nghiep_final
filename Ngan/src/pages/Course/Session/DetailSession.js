@@ -364,14 +364,24 @@ function DetailSession({ lessonId, setPercent }) {
         </div>
       )}
 
-      {lesson?.hasExercise === true &&
-        (lesson?.progressWatched >= lesson?.gatingRules || per >= lesson?.gatingRules) && (
-          <div className="footer-button">
-            <Button type="primary" onClick={handleClick}>
-              Bắt đầu làm bài
-            </Button>
-          </div>
-        )}
+      {lesson?.hasExercise === true && (
+        <div className="footer-button">
+          <Button
+            type="primary"
+            disabled={lesson?.progressWatched >= lesson?.gatingRules || per >= lesson?.gatingRules}
+            onClick={() => {
+              if (
+                lesson?.progressWatched >= lesson?.gatingRules ||
+                per >= lesson?.gatingRules
+              ) {
+                handleClick();
+              }
+            }}
+          >
+            Bắt đầu làm bài
+          </Button>
+        </div>
+      )}
 
       <Modal
         title="Bài tập tương tác"

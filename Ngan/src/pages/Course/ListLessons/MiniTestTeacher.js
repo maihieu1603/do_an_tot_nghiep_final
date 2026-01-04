@@ -201,19 +201,6 @@ function MiniTestTeacher(props) {
       ),
     },
     {
-      key: "2",
-      label: (
-        <div
-          onClick={() => {
-            showModal("Update");
-            setSessionId(test.id);
-          }}
-        >
-          Sửa bài test
-        </div>
-      ),
-    },
-    {
       key: "3",
       label: (
         <div

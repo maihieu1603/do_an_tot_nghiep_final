@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import dayjs from "dayjs";
 import ListItemStudent from "../../Course/ListLessons/ListItemStudent";
 import "./DetailStudyPlan.scss";
-import { Col, Progress, Row, Card, notification, Badge } from "antd";
+import { Col, Progress, Row, Card, notification, Badge, Modal } from "antd";
 import {
   CaretRightFilled,
   ScheduleTwoTone,
@@ -24,6 +24,11 @@ function DetailStudyPlan({ setPlan, trackId }) {
   const [weekActive, setWeekStudy] = useState(true);
   const handleActive = () => {
     setWeekStudy(!weekActive);
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
   };
 
   const [currentWeek, setCurrentWeek] = useState(dayjs());
@@ -159,6 +164,36 @@ function DetailStudyPlan({ setPlan, trackId }) {
   const navigate = useNavigate();
   const handleClick = (lesson) => {
     if (lesson.type === "LESSON") {
+      if (lesson.status !== "LOCK") {
+        navigate("/study/detail-session", {
+          state: { lessonId: lesson.id },
+        });
+      } else {
+        openNotification(
+          api,
+          "bottomRight",
+          "Thông báo",
+          "Bạn chưa được phép học bài này. Hãy hoàn thành các bài trước đó."
+        );
+      }
+    } else {
+      if (lesson.status !== "LOCK") {
+        navigate("/study/mini-test", {
+          state: { testId: lesson.id },
+        });
+      } else {
+        openNotification(
+          api,
+          "bottomRight",
+          "Thông báo",
+          "Bạn chưa được phép học bài này. Hãy hoàn thành các bài trước đó."
+        );
+      }
+    }
+  };
+
+  const handleClick1 = (type, lesson) => {
+    if (type === "LESSON") {
       if (lesson.status !== "LOCK") {
         navigate("/study/detail-session", {
           state: { lessonId: lesson.id },
@@ -463,9 +498,13 @@ function DetailStudyPlan({ setPlan, trackId }) {
             <div
               className="flex col__right--item1"
               style={{ cursor: "pointer" }}
+              onClick={showModal}
             >
               <div>
-                Bạn có <span style={{ color: "red", fontWeight: 700 }}>01</span>{" "}
+                Bạn có{" "}
+                <span style={{ color: "red", fontWeight: 700 }}>
+                  {info?.unitsCanHoanThanh?.length}
+                </span>{" "}
                 buổi chưa hoàn thành
               </div>
               <CaretRightFilled />
@@ -473,6 +512,37 @@ function DetailStudyPlan({ setPlan, trackId }) {
           </div>
         </Col>
       </Row>
+      <Modal
+        title="Các buổi học chưa hoàn thành"
+        closable={{ "aria-label": "Custom Close Button" }}
+        open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
+        footer={[]}
+      >
+        {info?.unitsCanHoanThanh?.map((i) => (
+          <>
+            {i?.lessons?.map((l) => (
+              <div
+                onClick={() => handleClick1("LESSON", l)}
+                className="modal-item-study"
+                style={{ cursor: "pointer" }}
+              >
+                Lesson: {l.title}
+              </div>
+            ))}
+
+            {i?.tests?.map((l) => (
+              <div
+                onClick={() => handleClick1("TEST", l)}
+                className="modal-item-study"
+                style={{ cursor: "pointer" }}
+              >
+                Test: {l.title}
+              </div>
+            ))}
+          </>
+        ))}
+      </Modal>
     </>
   );
 }

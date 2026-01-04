@@ -1,26 +1,26 @@
-.plan{
-    border: 1px solid #ddd;
-    border-radius: 15px;
-    background-color: #e3f8f6;
-    padding: 0 10px;
-    margin: 10px 0;
+.plan {
+  border: 1px solid #ddd;
+  border-radius: 15px;
+  background-color: #e3f8f6;
+  padding: 0 10px;
+  margin: 10px 0;
 
-    &__flex{
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-        height: 40px;
-    }
+  &__flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 40px;
+  }
 
-    &__title{
-        background-color: rgb(0, 177, 53);
-        color: white;
-        font-weight: 700;
-        font-size: 14px;
-        padding: 4px 8px;
-        border-radius: 12px;
-        height: 29px;
-    }
+  &__title {
+    background-color: rgb(0, 177, 53);
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    height: 29px;
+  }
 }
 
 /* ===============================
@@ -29,20 +29,19 @@
 
 /* 📱 Tablet & Mobile */
 @media (max-width: 768px) {
-
   /* 🔴 THÊM */
   .plan__flex {
     margin-top: 10px;
     flex-wrap: wrap;
-    align-items: center;      // không ép bottom
-    height: auto;             // cho phép giãn cao
+    align-items: center; // không ép bottom
+    height: auto; // cho phép giãn cao
     gap: 8px;
   }
 
-  .col__left-header{
+  .col__left-header {
     flex-wrap: wrap;
   }
-  .col__left-header--button{
+  .col__left-header--button {
     margin-top: 10px;
   }
 
@@ -50,22 +49,21 @@
   .plan__title {
     font-size: 13px;
     padding: 4px 10px;
-    height: auto;             // tránh ép chiều cao
+    height: auto; // tránh ép chiều cao
     white-space: nowrap;
   }
 }
 
 /* 📱 Mobile nhỏ */
 @media (max-width: 480px) {
-
   /* 🔴 THÊM */
   .plan__flex {
-    flex-direction: column;   // xếp dọc
+    flex-direction: column; // xếp dọc
     align-items: flex-start;
     gap: 6px;
   }
 
-  .col__left-header{
+  .col__left-header {
     flex-wrap: wrap;
   }
 
@@ -75,69 +73,74 @@
   }
 }
 
+.col__left,
+.col__right {
+  background-color: white;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  padding: 0 15px;
+  overflow-y: auto;
+}
 
-.col__left, .col__right{
+.col__left {
+  height: 600px;
+
+  &-header {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 2;
     background-color: white;
-    border-radius: 12px;
-    border: 1px solid #ddd;
-    padding: 0 15px;
-    overflow-y: auto;
-}
 
-.col__left{
-    height: 600px;
+    &--button {
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      cursor: pointer;
 
-    &-header{
-        padding: 12px;
-        border-bottom: 1px solid #ddd;
-        position: sticky;
-        top: 0;
-        z-index: 2;
-        background-color: white;
-
-        &--button{
-            padding: 10px 14px;
-            border-radius: 12px;
-            border: 1px solid #ddd;
-            cursor: pointer;
-
-            svg{
-                width: 20px;
-                height: 20px;
-            }
-        }
+      svg {
+        width: 20px;
+        height: 20px;
+      }
     }
+  }
 }
 
-.col__right{
+.col__right {
   margin-bottom: 10px;
 
-    &--button{
-        color:#1a78a4ff;
-        font-weight:500;
+  &--button {
+    color: #1a78a4ff;
+    font-weight: 500;
 
-        &:hover{
-            cursor: pointer;
-        }
+    &:hover {
+      cursor: pointer;
     }
+  }
 
-    &--font{
-        color: #8a8888;
-    }
+  &--font {
+    color: #8a8888;
+  }
 
-    &--item{
-        padding: 12px 0;
-    }
+  &--item {
+    padding: 12px 0;
+  }
 
-    &--item1{
-        padding: 12px 0;
-        height: 70px;
-        border: 1px solid #ddd;
-        margin: 12px 0;
-        border-radius: 10px;
-        padding: 15px;
-        background-color: #fbfbfb;
-    }
+  &--item1 {
+    height: 70px;
+    border: 1px solid #ddd;
+    margin: 12px 0;
+    border-radius: 10px;
+    padding: 15px;
+    background-color: #fbfbfb;
+  }
+}
+
+.modal-item-study {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
 }
 
 .week-calendar {
@@ -263,4 +266,3 @@
   background: #e6f4ff;
   transition: all 0.3s ease;
 }
-

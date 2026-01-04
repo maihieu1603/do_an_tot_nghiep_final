@@ -16,7 +16,7 @@ import { getId } from "../../../components/token";
 import dayjs from "dayjs";
 import DetailStudyPlan from "./DetailStudyPlan";
 
-function CreateStudyPlan({ setPlan }) {
+function CreateStudyPlan({ setPlan, onCreated }) {
   const [isActive, setIsActive] = useState(true);
   const [time, setTime] = useState(null);
   const [calendar, setCalendar] = useState([]);
@@ -199,7 +199,8 @@ function CreateStudyPlan({ setPlan }) {
     console.log(response);
     if (response.code === 200) {
       setLoadingCreate(false);
-      setPlan(true);
+      onCreated();
+      setTimeout(() => setPlan(true),1000);
     } else if (response.code === 401) {
       const refresh = await refreshToken();
       if (refresh.code === 200) {
@@ -207,7 +208,8 @@ function CreateStudyPlan({ setPlan }) {
         const retryResponse = await createPlan(data);
         if (retryResponse.code === 200) {
           setLoadingCreate(false);
-          setPlan(true);
+          onCreated();
+          setTimeout(() => setPlan(true),1000);
         } else {
           openNotification(api, "bottomRight", "Lỗi", retryResponse.message);
         }

@@ -52,7 +52,14 @@ function StudyPlanItem({ plan, index }) {
         <>
           <div className="items__session">
             {plan.plans?.map((lesson) => (
-              <div className="item" onClick={() => handleClick(lesson)}>
+              <div
+                className="item"
+                onClick={() => handleClick(lesson)}
+                style={{
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
                 <div className="item__tittle">
                   {lesson.type === "LESSON" ? (
                     <div className="item__tittle--sub">
@@ -63,6 +70,13 @@ function StudyPlanItem({ plan, index }) {
                       Test: {lesson.title}
                     </div>
                   )}
+                </div>
+                <div
+                  style={{
+                    color: lesson.status === "UNLOCK" ? "green" : "red",
+                  }}
+                >
+                  {lesson.status}
                 </div>
                 {plan.completedStar > 0 && (
                   <div className="plan__title">Đã hoàn thành</div>

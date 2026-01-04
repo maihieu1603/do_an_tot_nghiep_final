@@ -17,7 +17,12 @@ function ListItemStudent({ module, index, courseId }) {
         state: { lessonId: lesson.id, courseId: courseId },
       });
     } else {
-      openNotification(api, "bottomRight", "Thông báo", "Bạn chưa được phép học bài này. Hãy hoàn thành bài học trước đó.")
+      openNotification(
+        api,
+        "bottomRight",
+        "Thông báo",
+        "Bạn chưa được phép học bài này. Hãy hoàn thành bài học trước đó."
+      );
     }
   };
   const item = [
@@ -70,31 +75,43 @@ function ListItemStudent({ module, index, courseId }) {
         <>
           <div className="items__session">
             {module?.lessons?.map((lesson, i) => (
-              <div className="item" onClick={() => handleClick(lesson)}>
-                <PlayCircleTwoTone style={{ paddingTop: "8px" }} />
-                <div className="item__tittle">
-                  <div className="item__tittle--sub">
-                    Session {i + 1}: {lesson.title} - {lesson.summary}
+              <div className="flex">
+                <div className="item" onClick={() => handleClick(lesson)}>
+                  <PlayCircleTwoTone style={{ paddingTop: "8px" }} />
+                  <div className="item__tittle">
+                    <div className="item__tittle--sub">
+                      Session {i + 1}: {lesson.title} - {lesson.summary}
+                    </div>
+                    <div>
+                      <StarFilled
+                        style={{
+                          marginRight: "8px",
+                          color:
+                            lesson.completedStar >= 1 ? "#f6b464ff" : "#ddd",
+                        }}
+                      />
+                      <StarFilled
+                        style={{
+                          marginRight: "8px",
+                          color:
+                            lesson.completedStar >= 2 ? "#f6b464ff" : "#ddd",
+                        }}
+                      />
+                      <StarFilled
+                        style={{
+                          color:
+                            lesson.completedStar >= 3 ? "#f6b464ff" : "#ddd",
+                        }}
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <StarFilled
-                      style={{
-                        marginRight: "8px",
-                        color: lesson.completedStar >= 1 ? "#f6b464ff" : "#ddd",
-                      }}
-                    />
-                    <StarFilled
-                      style={{
-                        marginRight: "8px",
-                        color: lesson.completedStar >= 2 ? "#f6b464ff" : "#ddd",
-                      }}
-                    />
-                    <StarFilled
-                      style={{
-                        color: lesson.completedStar >= 3 ? "#f6b464ff" : "#ddd",
-                      }}
-                    />
-                  </div>
+                </div>
+                <div
+                  style={{
+                    color: lesson.status === "UNLOCK" ? "green" : "red",
+                  }}
+                >
+                  {lesson.status}
                 </div>
               </div>
             ))}

@@ -42,16 +42,20 @@ function StudyPlan() {
     }
   };
 
+  const handleCreated = async () => {
+    await checkExitPlan();
+  };
+
   useEffect(() => {
     checkExitPlan();
-  },[]);
+  }, []);
   return (
     <>
-    {context}
+      {context}
       {!plan ? (
-        <CreateStudyPlan setPlan={setPlan} />
+        <CreateStudyPlan setPlan={setPlan} onCreated={handleCreated}/>
       ) : (
-        <DetailStudyPlan setPlan={setPlan} trackId={trackId}/>
+        <DetailStudyPlan setPlan={setPlan} trackId={trackId} />
       )}
     </>
   );

@@ -84,15 +84,18 @@ function Vocal() {
   return (
     <>
       <div className="marginTop50">
-        <Button className="button__On" onClick={showModal}>
-          {!isModalOpen ? "Ôn tập từ vựng" : "Danh sách từ vựng"}
-        </Button>
+        {listWord?.dictionaries?.length > 0 && (
+          <Button className="button__On" onClick={showModal}>
+            {!isModalOpen ? "Ôn tập từ vựng" : "Danh sách từ vựng"}
+          </Button>
+        )}
+
         {!isModalOpen ? (
           <>
-            {listWord.length === 0 ? (
+            {listWord?.dictionaries?.length === 0 ? (
               <h1>Chưa có từ trong từ điển của bạn!</h1>
             ) : (
-              listWord.dictionaries.map((word) => (
+              listWord?.dictionaries?.map((word) => (
                 <div className="nghia">
                   <div className="flex1">
                     <h1 style={{ color: "#0071f9" }}>{word.word}</h1>

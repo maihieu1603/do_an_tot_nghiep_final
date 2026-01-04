@@ -62,6 +62,16 @@ function ListFirstTestExcercises() {
   const [api, contextHolder] = notification.useNotification();
   const [paragraphs, setParagraphs] = useState([]);
   const [paragraphSelect, setParagraphSelect] = useState(null);
+  const [content, setContent] = useState();
+
+  useEffect(() => {
+    if (ac === "Update") {
+      if (exerciseQuestions?.paragraphs) {
+        setContent(exerciseQuestions.paragraphs.join(""));
+      }
+    }
+  }, [ac]);
+  console.log(content);
 
   const handleChange = (value) => {
     setParagraphs(Array(value).fill("")); // tạo array paragraph
@@ -610,7 +620,10 @@ function ListFirstTestExcercises() {
                   <Tooltip placement="bottom" title="Sửa bài tập">
                     <Button
                       icon={<EditTwoTone />}
-                      onClick={() => showModal("Update", record)}
+                      onClick={() => {
+                        fetchGetQuestionsOfEx(record.id);
+                        setTimeout(() => showModal("Update", record), 1500);
+                      }}
                     />
                   </Tooltip>
                 )}
@@ -678,12 +691,14 @@ function ListFirstTestExcercises() {
         keyboard={!confirmLoading}
         closable={!confirmLoading}
         footer={
-          ac!== "View" && [
-            <Button  type="primary" onClick={handleOk} loading={confirmLoading}>Ok</Button>
+          ac !== "View" && [
+            <Button type="primary" onClick={handleOk} loading={confirmLoading}>
+              Ok
+            </Button>,
           ]
         }
       >
-        {(ac === "Create" || ac === "Update") && (
+        {(ac === "Create") && (
           <>
             {(selected === "LISTENING_1" ||
               selected === "LISTENING_2" ||
@@ -855,6 +870,80 @@ function ListFirstTestExcercises() {
                   />
                 </>
               ))}
+          </>
+        )}
+
+        {ac === "Update" && (
+          <>
+            {(excercise?.typeName === "Bài tập Listening Part 1" ||
+              excercise?.typeName === "Bài tập Listening Part 2" ||
+              excercise?.typeName === "Bài tập Listening Part 3 và 4") && (
+              <div
+                className="form__course--item"
+                style={{ justifyContent: "flex-start", gap: "20px" }}
+              >
+                <h4 className="white-space form__course--item--label">
+                  File nghe
+                </h4>
+                <Upload
+                  {...propsAudio}
+                  style={{ display: "flex", gap: "10px" }}
+                  disabled={confirmLoading}
+                >
+                  <Button icon={<UploadOutlined />} disabled={confirmLoading}>
+                    Select File
+                  </Button>
+                </Upload>
+              </div>
+            )}
+
+            {excercise?.typeName === "Bài tập Listening Part 3 và 4" && (
+              <div
+                className="form__course--item"
+                style={{ justifyContent: "flex-start", gap: "20px" }}
+              >
+                <h4 className="white-space form__course--item--label">
+                  Hình minh họa
+                </h4>
+                <Upload
+                  {...props}
+                  style={{ display: "flex", gap: "10px" }}
+                  disabled={confirmLoading}
+                >
+                  <Button icon={<UploadOutlined />} disabled={confirmLoading}>
+                    Select File
+                  </Button>
+                </Upload>
+              </div>
+            )}
+
+            {(excercise.typeName === "Bài tập Reading Part 6" ||
+              excercise.typeName === "Bài tập Reading Part 7") && (
+              <ReactQuill
+                theme="snow"
+                style={{ height: 150, marginBottom: 50 }}
+                value={content}
+                onChange={setContent}
+                modules={{
+                  toolbar: [
+                    [{ size: ["small", false, "large", "huge"] }], // ⭐ CỠ CHỮ
+                    ["bold", "italic", "underline"], // chữ đậm, nghiêng, gạch chân
+                    [{ list: "ordered" }, { list: "bullet" }], // danh sách
+                    [{ align: [] }], // ⭐ CĂN TRÁI / GIỮA / PHẢI / ĐỀU
+                    ["clean"], // xóa format
+                  ],
+                }}
+                formats={[
+                  "size",
+                  "bold",
+                  "italic",
+                  "underline",
+                  "list",
+                  "bullet",
+                  "align",
+                ]}
+              />
+            )}
           </>
         )}
 

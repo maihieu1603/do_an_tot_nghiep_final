@@ -50,12 +50,17 @@ self.onmessage = async (e) => {
     });
 
     const result = await response.json(); // ✔ FIXED: response.json(), không phải res.json()
-
-    self.postMessage({
-      type: "done",
-      videoPath: result.data, // đường dẫn backend trả về
-    });
-
+    if (result.code === 200) {
+      self.postMessage({
+        type: "done",
+        videoPath: result.data, // đường dẫn backend trả về
+      });
+    } else {
+      self.postMessage({
+        type: "error",
+        message: "Upload error",
+      });
+    }
   } catch (err) {
     self.postMessage({
       type: "error",
