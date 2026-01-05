@@ -98,6 +98,34 @@ public class ExerciseServiceImpl implements ExerciseService {
         exerciseRepository.save(exerciseEntity);
     }
 
+    @Override
+    public void updateExercise(ExerciseRequest exerciseRequest) {
+        ExerciseEntity exerciseEntity = exerciseRepository.findById(exerciseRequest.getId()).orElseThrow(()-> new AppException(ErrorCode.EXERCISE_NOT_FOUND));
+        if(exerciseRequest.getTitle() != null){
+            exerciseEntity.setTitle(exerciseRequest.getTitle());
+        }
+        if(exerciseRequest.getParagraphs() != null){
+            exerciseEntity.setParagraphs(exerciseRequest.getParagraphs());
+        }
+        if(exerciseRequest.getImageData() != null){
+            exerciseEntity.setImageData(exerciseRequest.getImageData());
+        }
+        if(exerciseRequest.getMediaData() != null){
+            exerciseEntity.setMediaData(exerciseRequest.getMediaData());
+        }
+        if(exerciseRequest.getShowTime() != null){
+            LessonEntity lessonEntity = exerciseEntity.getLesson();
+            List<ExerciseEntity> interactiveExercises = exerciseRepository.findByLesson_IdAndExercisetype_CodeAndIdNot(
+                    exerciseEntity.getLesson().getId(),
+                    "INTERACTIVE",
+                    exerciseEntity.getId()
+            );
+            checkTimeShowTime(exerciseRequest.getShowTime(),lessonEntity.getMediaassets());
+            checkExistShowTime(exerciseRequest.getShowTime(), interactiveExercises);
+            exerciseEntity.setShowTime(exerciseRequest.getShowTime());
+        }
+    }
+
     private void checkTimeShowTime(LocalTime showTime, List<MediaAssetEntity> mediaAssetEntities) {
         if(mediaAssetEntities != null && mediaAssetEntities.isEmpty()){
             throw new AppException(ErrorCode.LESSON_NOT_HAS_MEDIA);
@@ -163,4 +191,6 @@ public class ExerciseServiceImpl implements ExerciseService {
         }
         return  responses;
     }
+
+
 }

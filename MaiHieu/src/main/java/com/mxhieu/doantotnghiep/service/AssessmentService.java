@@ -15,4 +15,6 @@ public interface AssessmentService {
 
     List<AssessmentResponse> getAssessmentDetailForFistTest();
     List<AssessmentResponse> getAssessmentsDetailByTestId(int testId);
+
+    void updateAssessment(AssessmentRequest assessmentRequest);
 }

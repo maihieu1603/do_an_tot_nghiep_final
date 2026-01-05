@@ -69,6 +69,31 @@ public class ExerciseController {
                 .build();
         return response;
     }
+
+    @PutMapping(consumes = "multipart/form-data")
+    ApiResponse<?> updateExercise(@RequestPart String request,
+                                  @RequestPart(required = false) MultipartFile mediaData,
+                                  @RequestPart(required = false) MultipartFile imgData){
+        ObjectMapper mapper = new ObjectMapper();
+        ExerciseRequest exerciseRequest = null;
+        try{
+            exerciseRequest = objectMapper.readValue(request, ExerciseRequest.class);
+            if(mediaData != null) exerciseRequest.setMediaData(mediaData.getBytes());
+            if(imgData != null) exerciseRequest.setImageData(imgData.getBytes());
+        } catch (JsonMappingException e) {
+            throw new RuntimeException(e);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        exerciseService.updateExercise(exerciseRequest);
+        ApiResponse<ExerciseResponse> response = ApiResponse.<ExerciseResponse>builder()
+                .code(200)
+                .message("Exercise Created")
+                .build();
+        return response;
+    }
     @GetMapping("/orderIndext/{lessonId}")
     ApiResponse<?> getOrderIndex(@PathVariable Integer lessonId){
         return ApiResponse.builder()

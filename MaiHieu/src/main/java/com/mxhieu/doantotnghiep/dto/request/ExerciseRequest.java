@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class ExerciseRequest {
+    private Integer id;
     private String type;
     private String title;
     private int lessonID;

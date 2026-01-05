@@ -38,6 +38,24 @@ public class AssessmentServiceImpl implements AssessmentService {
     }
 
     @Override
+    public void updateAssessment(AssessmentRequest assessmentRequest) {
+        AssessmentEntity assessmentEntity = assessmentRepository.findById(assessmentRequest.getId()).orElseThrow(()->new AppException(ErrorCode.ASSESSMENT_NOT_FOUND));
+        if(assessmentRequest.getTitle() != null){
+            assessmentEntity.setTitle(assessmentRequest.getTitle());
+        }
+        if(assessmentRequest.getImageData() != null){
+            assessmentEntity.setImageData(assessmentRequest.getImageData());
+        }
+        if(assessmentRequest.getParagraphs() != null){
+            assessmentEntity.setParagraphs(assessmentRequest.getParagraphs());
+        }
+        if(assessmentRequest.getMediaData() != null){
+            assessmentEntity.setMediaData(assessmentRequest.getMediaData());
+        }
+        assessmentRepository.save(assessmentEntity);
+    }
+
+    @Override
     public List<AssessmentResponse> getSummaryAssessmentsByTestId(Integer testId) {
         List<AssessmentEntity> assessments = assessmentRepository.findByTestId(testId);
         List<AssessmentResponse> assessmentResponses = assessmentConverter.toResponseSummaryList(assessments);

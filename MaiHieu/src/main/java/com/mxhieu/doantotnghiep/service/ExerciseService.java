@@ -22,4 +22,6 @@ public interface ExerciseService {
     List<ExerciseResponse> getExerciseDetailsByLessonIdForStudent(Integer lessonId, Integer studentProfileId);
 
     List<ExerciseResponse> getInteractiveExerciseByLessonIdForStudent(Integer lessonId, Integer studentProfileId);
+
+    void updateExercise(ExerciseRequest exerciseRequest);
 }
