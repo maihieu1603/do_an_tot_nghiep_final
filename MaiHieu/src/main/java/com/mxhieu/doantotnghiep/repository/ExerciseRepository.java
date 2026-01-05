@@ -14,4 +14,5 @@ public interface ExerciseRepository extends JpaRepository<ExerciseEntity, Intege
 
     List<ExerciseEntity> findByLessonId(Integer lessonId);
     List<ExerciseEntity> findByLesson_IdAndExercisetype_Code(Integer lessonId, String exerciseTypeCode);
+    List<ExerciseEntity> findByLesson_IdAndExercisetype_CodeAndIdNot(Integer lessonId, String exercisetypeCode, Integer id);
 }

@@ -44,6 +44,32 @@ public class AssessmentController {
                 .build();
         return response;
     }
+
+    @PutMapping(consumes = "multipart/form-data")
+    ApiResponse<?> updateAssessment(@RequestPart String request,
+                                    @RequestPart(required = false) MultipartFile mediaData,
+                                    @RequestPart(required = false) MultipartFile imgData){
+        ObjectMapper mapper = new ObjectMapper();
+        AssessmentRequest assessmentRequest = null;
+        try{
+            assessmentRequest = mapper.readValue(request,AssessmentRequest.class);
+            if(mediaData != null) assessmentRequest.setMediaData(mediaData.getBytes());
+            if(imgData != null) assessmentRequest.setImageData(imgData.getBytes());
+        } catch (JsonMappingException e) {
+            throw new RuntimeException(e);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        assessmentService.updateAssessment(assessmentRequest);
+        ApiResponse<ExerciseResponse> response = ApiResponse.<ExerciseResponse>builder()
+                .code(200)
+                .message("Assessment Created")
+                .build();
+        return response;
+    }
+
     @GetMapping("/test/{testID}/summary")
     ApiResponse<?> getSummaryAssessmentsByTestId(@PathVariable Integer testID) {
         return ApiResponse.builder()
@@ -82,5 +108,6 @@ public class AssessmentController {
                 .data(assessmentService.getAssessmentsDetailByTestId(id))
                 .build();
     }
+
 
 }
