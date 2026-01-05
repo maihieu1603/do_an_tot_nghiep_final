@@ -10,15 +10,19 @@ import {
   getMiniTestSummary,
 } from "../../../services/CourseService";
 import { refreshToken, saveToken } from "../../../services/AuthService";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { openNotification } from "../../../components/Notification";
 import { logout } from "../../../components/function";
+import { unlock } from "../../../services/FirstTestService";
+import { getId } from "../../../components/token";
 
 function MiniTestDetail() {
   const navigate = useNavigate();
   const location = useLocation();
   const [testId, setTestId] = useState(location.state.testId);
   const courseId = location.state.courseId || null;
+  const statusRef = useRef(0);
+
 
   const detailImg = (genre) => {
     if (genre === "VOCABULARY" || genre === "TEST")
@@ -28,14 +32,45 @@ function MiniTestDetail() {
     else if (genre === "GRAMMAR") return "/images/Grammar.png";
   };
 
-  const handleClick = (lesson) => {
-    if (lesson.type === "LESSON") {
-      navigate("/study/detail-session", {
-        state: { lessonId: lesson.id, courseId: courseId },
-      });
-    } else if (lesson.type === "TEST") {
-      setTestId(lesson.id);
+  const fetchUnLock = async () => {
+    const data = {
+      testId: testId,
+      studentprofileId: getId(),
+    };
+    console.log(data);
+    const response = await unlock(data);
+
+    if (response.code === 200) {
+      console.log("Mở khóa thành công");
+      statusRef.current = 200;
+    } else if (response.code === 401) {
+      const refresh = await refreshToken();
+      if (refresh.code === 200) {
+        saveToken(refresh.data.token, refresh.data.refreshToken);
+      }
+    } else {
+      openNotification(
+        api,
+        "bottomRight",
+        "Lỗi",
+        response.message || "Lưu kết quả bài test thất bại"
+      );
     }
+  };
+
+  const handleClick = async(lesson) => {
+    await fetchUnLock();
+    setTimeout(() => {
+      if (statusRef.current === 200) {
+        if (lesson.type === "LESSON") {
+          navigate("/study/detail-session", {
+            state: { lessonId: lesson.id, courseId: courseId },
+          });
+        } else if (lesson.type === "TEST") {
+          setTestId(lesson.id);
+        }
+      }
+    }, 2000);
   };
 
   const [course, setCourse] = useState("");
@@ -238,6 +273,7 @@ function MiniTestDetail() {
     fetchGetMiniTestSummary();
     fetchGetMiniTestStar();
     fetchGetHistoryMiniTest();
+    statusRef.current = 0;
   }, [testId]);
 
   const items = [
@@ -328,7 +364,9 @@ function MiniTestDetail() {
               <Button
                 type="link"
                 onClick={() =>
-                  navigate("/minitest", { state: { testId: item, completed:true } })
+                  navigate("/minitest", {
+                    state: { testId: item, completed: true },
+                  })
                 }
               >
                 <h4>Xem chi tiết</h4>

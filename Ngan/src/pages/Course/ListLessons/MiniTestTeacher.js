@@ -20,6 +20,7 @@ import {
   createLessionOfModule,
   createTestOfModule,
   deleteModuleOfCourse,
+  deleteTestOfModule,
   getOrderIndexOfLesson,
   updateModuleOfCourse,
 } from "../../../services/CourseService";
@@ -85,11 +86,36 @@ function MiniTestTeacher(props) {
     handleCancel();
   };
 
+  const deleteTest = async () => {
+    const response = await deleteTestOfModule(sessionId);
+    console.log(response);
+    if (response.code === 200) {
+      openNotification(
+        api,
+        "bottomRight",
+        "Thành công",
+        "Xóa bài test thành công"
+      );
+      setTimeout(() => {
+        if (props.onReload) props.onReload();
+      }, 1000);
+    } else if (response.code === 401) {
+      const refresh = await refreshToken();
+      if (refresh.code === 200) {
+        saveToken(refresh.data.token, refresh.data.refreshToken);
+      }
+    } else {
+      openNotification(api, "bottomRight", "Lỗi", response.message);
+    }
+    handleCancel();
+  };
+
   const handleOk = () => {
     setConfirmLoading(true);
     if (ac === "View") {
     } else if (ac === "Update") {
     } else if (ac === "Delete") {
+      deleteTest();
     } else if (ac === "Create") {
       createTest();
     }
@@ -340,7 +366,7 @@ function MiniTestTeacher(props) {
       } else if (ac === "Update") {
         return "Sửa bài giảng";
       } else if (ac === "Delete") {
-        return "Xóa bài giảng";
+        return "Xóa bài test";
       } else if (ac === "View") {
         return "Xem bài giảng";
       }
@@ -390,7 +416,7 @@ function MiniTestTeacher(props) {
         }
       >
         {ac === "Delete" ? (
-          <div>Bạn chắc chắn muốn xóa bài giảng này?</div>
+          <div>Bạn chắc chắn muốn xóa bài test này?</div>
         ) : (
           <>
             {role === "TEACHER" && (

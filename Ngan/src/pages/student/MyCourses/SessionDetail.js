@@ -18,14 +18,18 @@ function SessionDetail() {
   const courseId = location.state.courseId || null;
   const [lessonId, setLessonId] = useState(location.state.lessonId);
   const navigate = useNavigate();
+  const statusRef = useRef(0);
 
-  const handleClick = (lesson) => {
-    if (lesson.type === "LESSON") {
-      setLessonId(lesson.id);
-    } else if (lesson.type === "TEST") {
-      navigate("/study/mini-test", {
-        state: { testId: lesson.id, courseId: courseId },
-      });
+  const handleClick = async(lesson) => {
+    await saveProgress();
+    if (statusRef.current === 200) {
+      if (lesson.type === "LESSON") {
+        setLessonId(lesson.id);
+      } else if (lesson.type === "TEST") {
+        navigate("/study/mini-test", {
+          state: { testId: lesson.id, courseId: courseId },
+        });
+      }
     }
   };
 
@@ -136,6 +140,7 @@ function SessionDetail() {
     fetchApiGetPath();
     fetchNextLesson();
     fetchPreviousLesson();
+    statusRef.current = 0;
   }, [lessonId]);
 
   const items =
@@ -191,15 +196,18 @@ function SessionDetail() {
     percentRef.current = percent;
   }, [percent]);
 
-  const saveProgress = () => {
+  const saveProgress = async () => {
     var data = {
       lessonId,
       studentProfileId: getId(),
       percentageWatched: parseInt(percentRef.current),
     };
     console.log(data);
-    const response = saveProcessLesson(data);
+    const response = await saveProcessLesson(data);
     console.log(response);
+    if (response.code === 200) {
+      statusRef.current = 200;
+    }
   };
   useEffect(() => {
     const handleBeforeUnload = () => {
