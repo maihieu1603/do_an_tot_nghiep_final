@@ -178,4 +178,9 @@ public class TestServiceImpl implements TestService {
         return true;
     }
 
+    @Override
+    public void deleteTest(Integer id) {
+        testRepository.deleteById(id);
+    }
+
 }

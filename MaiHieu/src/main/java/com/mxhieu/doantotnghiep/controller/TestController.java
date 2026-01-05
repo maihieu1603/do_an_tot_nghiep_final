@@ -68,4 +68,10 @@ public class TestController {
                 .data(testService.getTestAttemptIds(testId, studentProfileId))
                 .build();
     }
+
+    @DeleteMapping("/{id}")
+    public ApiResponse<?> deleteTest(@PathVariable Integer id){
+        testService.deleteTest(id);
+        return ApiResponse.builder().code(200).message("Delete Test Success").build();
+    }
 }

@@ -31,4 +31,5 @@ public interface TestService {
 
     boolean isCompletedTest(Integer id, Integer studentProfileId);
 
+    void deleteTest(Integer id);
 }
