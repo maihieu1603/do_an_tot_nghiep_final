@@ -2,15 +2,21 @@ import { Menu } from "antd";
 import { Link, useLocation } from "react-router-dom";
 
 function MenuSiderHome() {
-    const location = useLocation();
+  const location = useLocation();
+
+  const handleGoExam = () => {
+    const token = localStorage.getItem("accessToken");
+
+    window.location.href = "http://localhost:5173";
+  };
   const items = [
     {
       key: "/home/main",
       label: <Link to="/home/main">Trang chủ</Link>,
     },
     {
-      key: "/home/exam",
-      label: <Link to="/home/exam">Luyện đề</Link>,
+      key: "",
+      label: <span onClick={handleGoExam}>Luyện đề</span>,
     },
     {
       key: "/home/tratu",
@@ -24,7 +30,12 @@ function MenuSiderHome() {
 
   return (
     <>
-      <Menu mode="horizontal" items={items} disabledOverflow selectedKeys={[location.pathname]}/>
+      <Menu
+        mode="horizontal"
+        items={items}
+        disabledOverflow
+        selectedKeys={[location.pathname]}
+      />
     </>
   );
 }

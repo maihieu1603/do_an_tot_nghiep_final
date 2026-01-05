@@ -11,6 +11,12 @@ import { Link, useLocation } from "react-router-dom";
 function MenuSiderAdmin({ collapsed }) {
   const location = useLocation();
 
+  const handleGoExam = () => {
+    const token = localStorage.getItem("accessToken");
+
+    window.location.href = "http://localhost:5173";
+  };
+
   const items = [
     {
       key: "/admin/teachers",
@@ -36,6 +42,10 @@ function MenuSiderAdmin({ collapsed }) {
       key: "/admin/account",
       icon: <SettingOutlined />,
       label: <Link to="/admin/account">Thông tin tài khoản</Link>,
+    },
+    {
+      icon: <BookOutlined />,
+      label: <span onClick={handleGoExam}>Quản lý đề thi Toeic</span>,
     },
   ];
 
