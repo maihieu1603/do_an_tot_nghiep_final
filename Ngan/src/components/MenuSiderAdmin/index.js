@@ -14,7 +14,17 @@ function MenuSiderAdmin({ collapsed }) {
   const handleGoExam = () => {
     const token = localStorage.getItem("accessToken");
 
-    window.location.href = "http://localhost:5173";
+    const examWindow = window.open("http://localhost:5173", "_blank");
+
+    examWindow.onload = () => {
+      examWindow.postMessage(
+        {
+          type: "SEND_TOKEN",
+          accessToken: token,
+        },
+        "http://localhost:5173"
+      );
+    };
   };
 
   const items = [
@@ -52,7 +62,7 @@ function MenuSiderAdmin({ collapsed }) {
   return (
     <Menu
       mode="inline"
-      inlineCollapsed={collapsed}   // 🔥 CHỈ ICON KHI COLLAPSE
+      inlineCollapsed={collapsed} // 🔥 CHỈ ICON KHI COLLAPSE
       items={items}
       selectedKeys={[location.pathname]}
     />
