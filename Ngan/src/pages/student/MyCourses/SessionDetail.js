@@ -112,6 +112,8 @@ function SessionDetail() {
           logout();
         }, 1000);
       }
+    }else{
+      setPreviousId();
     }
   };
 
@@ -142,6 +144,8 @@ function SessionDetail() {
           logout();
         }, 1000);
       }
+    }else{
+      setNextId();
     }
   };
 

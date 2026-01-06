@@ -147,6 +147,8 @@ function MiniTestDetail() {
           logout();
         }, 1000);
       }
+    }else{
+      setPreviousId();
     }
   };
 
@@ -177,6 +179,8 @@ function MiniTestDetail() {
           logout();
         }, 1000);
       }
+    }else{
+      setNextId();
     }
   };
 

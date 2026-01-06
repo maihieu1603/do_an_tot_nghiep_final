@@ -210,8 +210,8 @@ function CreateTeacher() {
       openNotification(
         api,
         "bottomRight",
-        "Thành công",
-        response.message
+        "Lỗi",
+        "OTP không chính xác, vui lòng xác thực lại"
       );
     } else if (response.code === 401) {
       const refresh = await refreshToken();
@@ -486,7 +486,7 @@ function CreateTeacher() {
                           if (!value) return Promise.resolve();
 
                           // validate email chuẩn RFC 5322
-                          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                          const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
 
                           if (!emailRegex.test(value)) {
                             return Promise.reject("Email không đúng định dạng");
