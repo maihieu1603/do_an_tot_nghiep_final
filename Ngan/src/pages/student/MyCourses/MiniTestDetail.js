@@ -21,8 +21,12 @@ function MiniTestDetail() {
   const location = useLocation();
   const [testId, setTestId] = useState(location.state.testId);
   const courseId = location.state.courseId || null;
+  const type = location.state.type || null;
+  console.log(type);
   const statusRef = useRef(0);
-
+  if (type === "DONE") {
+    statusRef.current = 200;
+  }
 
   const detailImg = (genre) => {
     if (genre === "VOCABULARY" || genre === "TEST")
@@ -49,28 +53,28 @@ function MiniTestDetail() {
         saveToken(refresh.data.token, refresh.data.refreshToken);
       }
     } else {
-      openNotification(
-        api,
-        "bottomRight",
-        "Lỗi",
-        response.message || "Lưu kết quả bài test thất bại"
-      );
+      if (statusRef.current !== 200)
+        openNotification(
+          api,
+          "bottomRight",
+          "Thông báo",
+          "Chưa mở khóa bài vì bạn chưa hoàn thành bài học này"
+        );
     }
   };
-
-  const handleClick = async(lesson) => {
+  console.log(statusRef.current);
+  const handleClick = async (lesson) => {
     await fetchUnLock();
-    setTimeout(() => {
-      if (statusRef.current === 200) {
-        if (lesson.type === "LESSON") {
-          navigate("/study/detail-session", {
-            state: { lessonId: lesson.id, courseId: courseId },
-          });
-        } else if (lesson.type === "TEST") {
-          setTestId(lesson.id);
-        }
+
+    if (statusRef.current === 200) {
+      if (lesson.type === "LESSON") {
+        navigate("/study/detail-session", {
+          state: { lessonId: lesson.id, courseId: courseId },
+        });
+      } else if (lesson.type === "TEST") {
+        setTestId(lesson.id);
       }
-    }, 2000);
+    }
   };
 
   const [course, setCourse] = useState("");
@@ -289,7 +293,9 @@ function MiniTestDetail() {
         <Button
           type="link"
           onClick={() =>
-            navigate("/student/course-detail", { state: { id: courseId } })
+            navigate("/student/course-detail", {
+              state: { id: courseId, type },
+            })
           }
         >
           {category}

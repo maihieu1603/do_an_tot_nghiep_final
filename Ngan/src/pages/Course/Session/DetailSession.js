@@ -23,7 +23,7 @@ function timeToSeconds(timeStr) {
   return h * 3600 + m * 60 + s;
 }
 
-function DetailSession({ lessonId, setPercent }) {
+function DetailSession({ lessonId, setPercent, oldId, setLessonId }) {
   const [openModal, setOpenModal] = useState(false);
 
   const navigate = useNavigate();
@@ -344,6 +344,7 @@ function DetailSession({ lessonId, setPercent }) {
       }
     }else{
       openNotification(api, "bottomRight", "Thông báo", response.message);
+      setLessonId(oldId);
     }
   };
 
@@ -406,7 +407,7 @@ function DetailSession({ lessonId, setPercent }) {
         onCancel={submit ? handleCancel : undefined}
         footer={
           stt !== null &&
-          exercises[stt].isCompleted === false && [
+          exercises[stt]?.isCompleted === false && [
             <Button
               key="submit"
               type="primary"

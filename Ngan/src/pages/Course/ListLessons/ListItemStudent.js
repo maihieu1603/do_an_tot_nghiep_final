@@ -8,13 +8,14 @@ import {
 import "./ListItem.scss";
 import { useNavigate } from "react-router-dom";
 import { openNotification } from "../../../components/Notification";
-function ListItemStudent({ module, index, courseId }) {
+function ListItemStudent({ module, index, courseId, type }) {
   const [api, content] = notification.useNotification();
   const navigate = useNavigate();
+  console.log(type);
   const handleClick = (lesson) => {
     if (lesson.status === "UNLOCK") {
       navigate("/study/detail-session", {
-        state: { lessonId: lesson.id, courseId: courseId },
+        state: { lessonId: lesson.id, courseId: courseId, type: type },
       });
     } else {
       openNotification(

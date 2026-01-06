@@ -15,6 +15,8 @@ import { openNotification } from "../../../components/Notification";
 function CourseDetail() {
   const location = useLocation();
   const id = location.state?.id;
+  const type = location.state?.type;
+  console.log(type);
   const [course, setCourse] = useState();
   const [api, context] = notification.useNotification();
   const fetchGetCourseStudent = async () => {
@@ -61,7 +63,7 @@ function CourseDetail() {
             lg={{ span: 16, order: 1 }}
             xl={{ span: 16, order: 1 }}
           >
-            <ListLessons role="Student" modules={course?.modules} id={id} />
+            <ListLessons role="Student" modules={course?.modules} id={id} type={type}/>
           </Col>
           <Col
             xs={{ span: 24, order: 1 }} // mobile: lên trên

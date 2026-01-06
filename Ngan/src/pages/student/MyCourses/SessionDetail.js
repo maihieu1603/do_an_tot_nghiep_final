@@ -16,12 +16,21 @@ import { getId } from "../../../components/token";
 function SessionDetail() {
   const location = useLocation();
   const courseId = location.state.courseId || null;
+  const type = location.state.type || null;
+
   const [lessonId, setLessonId] = useState(location.state.lessonId);
+  const [oldLessonId, setOldLessonId] = useState();
   const navigate = useNavigate();
   const statusRef = useRef(0);
+  if (type === "DONE") {
+    statusRef.current = 200;
+  }
 
-  const handleClick = async(lesson) => {
+  const handleClick = async (lesson) => {
+    console.log(type);
+    setOldLessonId(lessonId);
     await saveProgress();
+    console.log(statusRef.current);
     if (statusRef.current === 200) {
       if (lesson.type === "LESSON") {
         setLessonId(lesson.id);
@@ -162,7 +171,7 @@ function SessionDetail() {
                 type="link"
                 onClick={() =>
                   navigate("/student/course-detail", {
-                    state: { id: courseId },
+                    state: { id: courseId, type },
                   })
                 }
               >
@@ -207,6 +216,14 @@ function SessionDetail() {
     console.log(response);
     if (response.code === 200) {
       statusRef.current = 200;
+    } else {
+      if (statusRef.current !== 200)
+        openNotification(
+          api,
+          "bottomRight",
+          "Thông báo",
+          "Chưa mở khóa bài vì bạn chưa hoàn thành bài học này"
+        );
     }
   };
   useEffect(() => {
@@ -256,7 +273,12 @@ function SessionDetail() {
         </div>
       </div>
       <div style={{ marginTop: "60px" }}>
-        <DetailSession lessonId={lessonId} setPercent={setPercent} />
+        <DetailSession
+          lessonId={lessonId}
+          setPercent={setPercent}
+          oldId={oldLessonId}
+          setLessonId={setLessonId}
+        />
       </div>
     </>
   );

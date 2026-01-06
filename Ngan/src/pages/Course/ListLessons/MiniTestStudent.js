@@ -3,14 +3,14 @@ import "./ListItem.scss";
 import { useNavigate } from "react-router-dom";
 import { notification } from "antd";
 import { openNotification } from "../../../components/Notification";
-function MiniTestStudent({ module, index, courseId }) {
+function MiniTestStudent({ module, index, courseId, type }) {
   const navigate = useNavigate();
   const [api, context] = notification.useNotification();
   const handleClick = () => {
     if (module?.tests[0]?.id) {
       if (module?.tests[0].status === "UNLOCK") {
         navigate("/study/mini-test", {
-          state: { testId: module.tests[0].id, courseId },
+          state: { testId: module.tests[0].id, courseId, type },
         });
       }else{
         openNotification(api, "bottomRight", "Thông báo", "Bạn chưa được phép học bài này. Hãy hoàn thành bài học trước đó.")
