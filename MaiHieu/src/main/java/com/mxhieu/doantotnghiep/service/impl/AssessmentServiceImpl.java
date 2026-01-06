@@ -77,9 +77,13 @@ public class AssessmentServiceImpl implements AssessmentService {
     public List<AssessmentResponse> getAssessmentDetailForFistTest() {
         List<TestEntity> testEntities = testRepository.findByType("FIRST_TEST");
 
+        testEntities = locBaiTestItCauHoi(testEntities);
+
         if (testEntities.isEmpty()) {
             throw new RuntimeException("No test found");
         }
+
+
 
         TestEntity randomTest =
                 testEntities.get(new Random().nextInt(testEntities.size()));
@@ -104,6 +108,22 @@ public class AssessmentServiceImpl implements AssessmentService {
 
         });
         return  assessmentResponses;
+    }
+
+    private List<TestEntity> locBaiTestItCauHoi(List<TestEntity> testEntities) {
+        List<TestEntity> result = new ArrayList<>();
+        for(TestEntity testEntity : testEntities){
+            int countQuesstion = 0;
+
+            for (AssessmentEntity assessmentEntity : testEntity.getAssessments()){
+                countQuesstion += assessmentEntity.getAssessmentQuestions().size();
+            }
+
+            if(countQuesstion >= 10){
+                result.add(testEntity);
+            }
+        }
+        return result;
     }
 
     @Override
