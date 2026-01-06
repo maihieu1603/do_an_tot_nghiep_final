@@ -18,10 +18,16 @@ function CourseItem({ course }) {
       );
     }
   };
+
+  const handleText = (lock) => {
+    if(lock === "DONE") return "Vượt qua";
+    else if(lock === "UNLOCK") return "Mở khóa";
+    else if(lock === "LOCK") return "Khóa";
+  }
   return (
     <>
       {contextHolder}
-      <Badge.Ribbon text={course?.lock}>
+      <Badge.Ribbon text={handleText(course?.lock)}>
         <div className="course__item" onClick={handleClick}>
           <div className="course__item--boxi">
             <img

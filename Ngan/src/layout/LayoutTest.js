@@ -188,8 +188,9 @@ function LayoutTest() {
             {result
               ?.filter((item) => item.status === 2)
               .map((item) => (
-                <div className="borderTest first-item" key={item.id}>
+                <div className="flex borderTest first-item" key={item.id}>
                   <div>Khóa học {item.trackResponse.code} Toeic</div>
+                  <div style={{color:"green"}}>Đã vượt qua</div>
                 </div>
               ))}
           </>
@@ -204,10 +205,12 @@ function LayoutTest() {
               ?.filter((item) => item.status !== 2)
               .map((item, index) => (
                 <div
-                  className={`borderTest ${index === 0 ? "first-item" : ""}`}
+                  className={`flex borderTest ${index === 0 ? "first-item" : ""}`}
                   key={item.id}
                 >
                   <div>Khóa học {item.trackResponse.code} Toeic</div>
+                  {item.status === 1 && <div style={{color:"green"}}>Mở khóa</div>}
+                  {item.status === 0 && <div style={{color:"red"}}>Khóa</div>}
                 </div>
               ))}
           </>
