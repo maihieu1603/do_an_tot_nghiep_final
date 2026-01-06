@@ -8,6 +8,8 @@ function ListLessons(props) {
   const modules = props.modules;
   const courseId = props.id;
   const status = props.status;
+  const type = props.type;
+  console.log(type);
   const track = props.track;
   return (
     <>
@@ -57,12 +59,14 @@ function ListLessons(props) {
                         module={module}
                         index={index}
                         courseId={courseId}
+                        type={type}
                       />
                     ) : (
                       <MiniTestStudent
                         module={module}
                         index={index}
                         courseId={courseId}
+                        type={type}
                       />
                     )}
                   </>

@@ -17,31 +17,6 @@ function LayoutMiniTest() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [api,contextHolder] = notification.useNotification();
 
-  const fetchUnLock = async() => {
-    const data ={
-      testId: testId,
-      studentprofileId: getId()
-    }
-    console.log(data);
-    const response = await unlock(data);
-    
-    if (response.code === 200) {
-      console.log("Mở khóa thành công");
-    } else if (response.code === 401) {
-      const refresh = await refreshToken();
-      if (refresh.code === 200) {
-        saveToken(refresh.data.token, refresh.data.refreshToken);
-      }
-    } else {
-      openNotification(
-        api,
-        "bottomRight",
-        "Lỗi",
-        response.message || "Lưu kết quả bài test thất bại"
-      );
-    }
-  }
-
   const handleSubmitFromChild = async (data) => {
     setIsSubmitted(true);
 
@@ -50,7 +25,6 @@ function LayoutMiniTest() {
     
     if (response.code === 200) {
       console.log("Lưu thành công");
-      fetchUnLock();
     } else if (response.code === 401) {
       const refresh = await refreshToken();
       if (refresh.code === 200) {

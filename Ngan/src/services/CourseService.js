@@ -84,6 +84,11 @@ export const createTestOfModule = async(data) => {
     return result;
 }
 
+export const deleteTestOfModule = async(id) => {
+    const result = await del(`tests/${id}`);
+    return result;
+}
+
 export const publicCourse = async(id) => {
     const result = await put(`courses/publish/${id}`);
     return result;

@@ -593,13 +593,13 @@ function ListFirstTestExcercises() {
           <>
             {role === "ADMIN" && (
               <>
-                <Tooltip placement="bottom" title="Xóa">
+                {/* <Tooltip placement="bottom" title="Xóa">
                   <Button
                     onClick={() => showModal("Delete", record)}
                     icon={<DeleteTwoTone twoToneColor="#c41a1aff" />}
                     style={{ marginRight: "10px" }}
                   />
-                </Tooltip>
+                </Tooltip> */}
 
                 <Tooltip placement="bottom" title="Xem chi tiết">
                   <Button

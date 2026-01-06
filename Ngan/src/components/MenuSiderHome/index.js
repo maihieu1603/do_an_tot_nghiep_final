@@ -6,19 +6,36 @@ function MenuSiderHome() {
 
   const handleGoExam = () => {
     const token = localStorage.getItem("accessToken");
+    if (!token) {
+      console.error("❌ No accessToken");
+      return;
+    }
 
-    const examWindow = window.open("http://localhost:5173", "_blank");
+    const examWindow = window.open("http://localhost:5173/user", "_blank");
 
-    examWindow.onload = () => {
-      examWindow.postMessage(
-        {
-          type: "SEND_TOKEN",
-          accessToken: token,
-        },
-        "http://localhost:5173"
-      );
+    const handleMessage = (event) => {
+      if (event.origin !== "http://localhost:5173") return;
+
+      // 👈 đúng với bên 5173: type === "ready"
+      if (event.data?.type === "ready") {
+        console.log("📥 5173 ready → send token");
+
+        examWindow.postMessage(
+          {
+            type: "auth", // 👈 đúng type
+            accessToken: token,
+          },
+          "http://localhost:5173"
+        );
+
+        // cleanup
+        window.removeEventListener("message", handleMessage);
+      }
     };
+
+    window.addEventListener("message", handleMessage);
   };
+
   const items = [
     {
       key: "/home/main",

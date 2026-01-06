@@ -13,6 +13,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { logout } from "../../../components/function";
 import { openNotification } from "../../../components/Notification";
 import OnlyChoice from "../Exercise/OnlyChoice";
+import { getId } from "../../../components/token";
+import { saveAnswerEx } from "../../../services/ExerciseService";
 
 function timeToSeconds(timeStr) {
   const parts = timeStr.split(":").map(Number);
@@ -21,7 +23,7 @@ function timeToSeconds(timeStr) {
   return h * 3600 + m * 60 + s;
 }
 
-function DetailSession({ lessonId, setPercent }) {
+function DetailSession({ lessonId, setPercent, oldId, setLessonId }) {
   const [openModal, setOpenModal] = useState(false);
 
   const navigate = useNavigate();
@@ -151,7 +153,7 @@ function DetailSession({ lessonId, setPercent }) {
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     setSubmit(true);
     setExercises((prev) => {
       const newList = [...prev];
@@ -167,6 +169,24 @@ function DetailSession({ lessonId, setPercent }) {
 
       return newList;
     });
+
+    const attemptanswerRequests = exercises[stt].questions.map((q) => ({
+      questionId: q.id,
+      choiceId: q?.answering?.id, // value user chọn
+    }));
+
+    const data = {
+      studentProfileId: getId(),
+      exerciseId: exercises[stt].id,
+      attemptanswerRequests,
+    };
+
+    const response = await saveAnswerEx(data);
+    if(response.code === 200){
+      console.log("Lưu thành công");
+    }else{
+      console.log(response);
+    }
   };
 
   const [per, setPer] = useState(0);
@@ -322,6 +342,9 @@ function DetailSession({ lessonId, setPercent }) {
           logout();
         }, 1000);
       }
+    }else{
+      openNotification(api, "bottomRight", "Thông báo", response.message);
+      setLessonId(oldId);
     }
   };
 
@@ -368,14 +391,8 @@ function DetailSession({ lessonId, setPercent }) {
         <div className="footer-button">
           <Button
             type="primary"
-            disabled={lesson?.progressWatched >= lesson?.gatingRules || per >= lesson?.gatingRules}
             onClick={() => {
-              if (
-                lesson?.progressWatched >= lesson?.gatingRules ||
-                per >= lesson?.gatingRules
-              ) {
-                handleClick();
-              }
+              handleClick();
             }}
           >
             Bắt đầu làm bài
@@ -390,7 +407,7 @@ function DetailSession({ lessonId, setPercent }) {
         onCancel={submit ? handleCancel : undefined}
         footer={
           stt !== null &&
-          exercises[stt].isCompleted === false && [
+          exercises[stt]?.isCompleted === false && [
             <Button
               key="submit"
               type="primary"

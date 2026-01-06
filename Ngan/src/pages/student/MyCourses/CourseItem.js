@@ -8,7 +8,7 @@ function CourseItem({ course }) {
   const [api, contextHolder] = notification.useNotification();
   const handleClick = () => {
     if (course?.lock !== "LOCK")
-      navigate("/student/course-detail", { state: { id: course.id } });
+      navigate("/student/course-detail", { state: { id: course.id, type: course?.lock || null } });
     else {
       openNotification(
         api,

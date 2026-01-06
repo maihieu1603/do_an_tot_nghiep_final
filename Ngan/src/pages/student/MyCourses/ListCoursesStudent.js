@@ -56,7 +56,7 @@ function ListCoursesStudent({ type }) {
       <div className="mycourse__header">
         <div className="mycourse__header--left">Khóa học của tôi</div>
 
-        <div className="mycourse__header--right">
+        <div className="mycourse__header--right" style={{display:"none"}}>
           <Search
             placeholder="Tìm kiếm khóa học"
             onSearch={onSearch}
