@@ -11,7 +11,7 @@ function TestItem({test}) {
   }
   return (
     <>
-      <div style={{ width: "300px" }} onClick={handleClick}>
+      <div style={{ width: "285px" }} onClick={handleClick}>
         <div className="item__header miniTest" style={{ paddingLeft: "24px" }}>
           <img src="/images/Vocabulary.png" style={{ width: "50px" }} />
           <div className="item__header--des">

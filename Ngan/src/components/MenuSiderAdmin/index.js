@@ -18,7 +18,7 @@ function MenuSiderAdmin({ collapsed }) {
       return;
     }
 
-    const examWindow = window.open("http://localhost:5173/admin", "_blank");
+    const examWindow = window.open("http://localhost:5173/admin", "_self");
 
     const handleMessage = (event) => {
       if (event.origin !== "http://localhost:5173") return;

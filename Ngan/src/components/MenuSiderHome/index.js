@@ -11,7 +11,7 @@ function MenuSiderHome() {
       return;
     }
 
-    const examWindow = window.open("http://localhost:5173/user", "_blank");
+    const examWindow = window.open("http://localhost:5173/user", "_self");
 
     const handleMessage = (event) => {
       if (event.origin !== "http://localhost:5173") return;
