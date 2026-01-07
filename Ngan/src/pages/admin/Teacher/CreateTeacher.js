@@ -45,8 +45,8 @@ function CreateTeacher() {
   console.log(mode);
   const record = location.state?.record || null;
 
-  const fetchApiCourse = async (type,id) => {
-    const response = await getListCoursesOfTeacher(type,id);
+  const fetchApiCourse = async (type, id) => {
+    const response = await getListCoursesOfTeacher(type, id);
     console.log(response);
     if (response.code === 200) {
       setCourses(response.data);
@@ -54,7 +54,7 @@ function CreateTeacher() {
       const refresh = await refreshToken();
       if (refresh.code === 200) {
         saveToken(refresh.data.token, refresh.data.refreshToken);
-        const retryResponse = await getListCoursesOfTeacher(type,id);
+        const retryResponse = await getListCoursesOfTeacher(type, id);
         if (retryResponse.code === 200) {
           setCourses(retryResponse.data);
         } else {
@@ -81,13 +81,13 @@ function CreateTeacher() {
       form.setFieldsValue({
         ...record,
         birthday: record.birthday
-        ? dayjs(record.birthday, "DD/MM/YYYY", true)
-        : null,
+          ? dayjs(record.birthday, "DD/MM/YYYY", true)
+          : null,
         graduationYear: record.graduationYear
           ? dayjs(record.graduationYear.toString())
           : null,
       });
-      fetchApiCourse("Main",record.id);
+      fetchApiCourse("Main", record.id);
     }
   }, [mode, form, record]);
 
@@ -104,7 +104,7 @@ function CreateTeacher() {
       setTeacher(payload);
       setLoading(true);
       const response = await createTeacher(payload);
-      setTimeout(() => setOpen(true),1000);
+      setTimeout(() => setOpen(true), 1000);
       console.log(response);
       if (response.code === 200) {
         setLoading(false);
@@ -151,7 +151,7 @@ function CreateTeacher() {
         }, 1000);
       }
     } else {
-      payload={...payload, teacherid: teacher.id};
+      payload = { ...payload, teacherid: teacher.id };
       console.log(payload);
       const response = await updateTeacher(payload);
       console.log(response);
@@ -206,7 +206,7 @@ function CreateTeacher() {
         "Thành công",
         "Email đã được xác thực"
       );
-    }else if (response.code === 2000 || response.code === 2001) {
+    } else if (response.code === 2000 || response.code === 2001) {
       openNotification(
         api,
         "bottomRight",
@@ -365,7 +365,7 @@ function CreateTeacher() {
                   name="fullName"
                   rules={[{ required: true, message: "Vui lòng nhập" }]}
                 >
-                  <Input disabled={loading}/>
+                  <Input disabled={loading} />
                 </Form.Item>
               </div>
             </Col>
@@ -405,20 +405,27 @@ function CreateTeacher() {
                     {
                       validator: (_, value) => {
                         if (!value) return Promise.resolve();
-                        if (value.isAfter(new Date())) {
+
+                        if (value.isAfter(dayjs())) {
                           return Promise.reject(
-                            "Ngày sinh phải nhỏ hơn ngày hiện tại"
+                            new Error("Ngày sinh phải nhỏ hơn ngày hiện tại")
                           );
                         }
+
+                        const minDate = dayjs().subtract(20, "year");
+
+                        if (value.isAfter(minDate)) {
+                          return Promise.reject(
+                            new Error("Tuổi phải từ 20 trở lên")
+                          );
+                        }
+
                         return Promise.resolve();
                       },
                     },
                   ]}
                 >
-                  <DatePicker
-                    style={{ width: "100%" }}
-                    disabled={loading}
-                  />
+                  <DatePicker style={{ width: "100%" }} disabled={loading} />
                 </Form.Item>
               </div>
             </Col>
@@ -460,7 +467,7 @@ function CreateTeacher() {
                     },
                   ]}
                 >
-                  <Input maxLength={10} disabled={loading}/>
+                  <Input maxLength={10} disabled={loading} />
                 </Form.Item>
               </div>
             </Col>
@@ -528,7 +535,7 @@ function CreateTeacher() {
                   name="address"
                   rules={[{ required: true, message: "Vui lòng nhập" }]}
                 >
-                  <Input disabled={loading}/>
+                  <Input disabled={loading} />
                 </Form.Item>
               </div>
             </Col>
@@ -542,7 +549,7 @@ function CreateTeacher() {
                   name="university"
                   rules={[{ required: true, message: "Vui lòng nhập" }]}
                 >
-                  <Input disabled={loading}/>
+                  <Input disabled={loading} />
                 </Form.Item>
               </div>
             </Col>
@@ -556,7 +563,7 @@ function CreateTeacher() {
                   name="major"
                   rules={[{ required: true, message: "Vui lòng nhập" }]}
                 >
-                  <Input disabled={loading}/>
+                  <Input disabled={loading} />
                 </Form.Item>
               </div>
             </Col>
@@ -570,7 +577,11 @@ function CreateTeacher() {
                   name="graduationYear"
                   rules={[{ required: true, message: "Vui lòng nhập" }]}
                 >
-                  <DatePicker picker="year" style={{ width: "100%" }} disabled={loading}/>
+                  <DatePicker
+                    picker="year"
+                    style={{ width: "100%" }}
+                    disabled={loading}
+                  />
                 </Form.Item>
               </div>
             </Col>
@@ -584,7 +595,7 @@ function CreateTeacher() {
                   name="degree"
                   rules={[{ required: true, message: "Vui lòng nhập" }]}
                 >
-                  <Input disabled={loading}/>
+                  <Input disabled={loading} />
                 </Form.Item>
               </div>
             </Col>
@@ -598,7 +609,7 @@ function CreateTeacher() {
                   name="englishCertificate"
                   rules={[{ required: true, message: "Vui lòng nhập" }]}
                 >
-                  <Input disabled={loading}/>
+                  <Input disabled={loading} />
                 </Form.Item>
               </div>
             </Col>
@@ -613,7 +624,7 @@ function CreateTeacher() {
                   name="teachingExperience"
                   rules={[{ required: true, message: "Vui lòng nhập" }]}
                 >
-                  <Input.TextArea disabled={loading}/>
+                  <Input.TextArea disabled={loading} />
                 </Form.Item>
               </div>
             </Col>

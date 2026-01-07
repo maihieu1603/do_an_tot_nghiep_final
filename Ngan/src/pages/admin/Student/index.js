@@ -109,6 +109,7 @@ function ListStudents() {
   return (
     <>
       {content}
+      <h1 className="page-title">Danh sách học viên</h1>
       <Table columns={columns} dataSource={students} />
     </>
   );

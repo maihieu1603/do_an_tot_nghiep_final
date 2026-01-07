@@ -65,13 +65,13 @@ function Login() {
           <Form form={form} name="login" onFinish={handleLogin}>
             <div className="form__login--item">
               <h4 className="form__login--item--title">Tài khoản</h4>
-              <Form.Item name="email" className="form__login--input">
+              <Form.Item name="email" className="form__login--input" rules={[{ required: true, message: "Không được để trống" }]}>
                 <Input disabled={disabled} />
               </Form.Item>
             </div>
             <div className="form__login--item">
               <h4 className="form__login--item--title">Mật khẩu</h4>
-              <Form.Item name="password" className="form__login--input">
+              <Form.Item name="password" className="form__login--input" rules={[{ required: true, message: "Không được để trống" }]}>
                 <Input.Password disabled={disabled} />
               </Form.Item>
             </div>

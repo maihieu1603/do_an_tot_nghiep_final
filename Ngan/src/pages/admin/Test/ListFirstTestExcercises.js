@@ -44,6 +44,7 @@ import {
   deleteQuestionOfExerciseTest,
   getListExercisesOfTest,
   getListQuestionOfExerciseTest,
+  updateExerciseOfTest,
 } from "../../../services/ExerciseService";
 import { refreshToken, saveToken } from "../../../services/AuthService";
 import ReactQuill from "react-quill";
@@ -200,9 +201,67 @@ function ListFirstTestExcercises() {
     setIsModalOpen(true);
   };
 
+  const updateExcerCise = async () => {
+    setConfirmLoading(true);
+    const formData = new FormData();
+    var exerciseRequest;
+
+    if (
+      excercise.typeName === "Bài tập Reading Part 6" ||
+      excercise.typeName === "Bài tập Reading Part 7"
+    ) {
+      exerciseRequest = {
+        id: excercise.id,
+        paragraphs: [...content],
+      };
+    } else {
+      exerciseRequest = {
+        id: excercise.id,
+      };
+      formData.append("mediaData", audioList[0]); // file audio
+    }
+
+    formData.append("request", JSON.stringify(exerciseRequest)); // Postman gửi dạng text JSON
+    
+
+    const response = await updateExerciseOfTest(formData);
+    console.log(response);
+
+    if (response.code === 200) {
+      openNotification(
+        api,
+        "bottomRight",
+        "Thành công",
+        "Cập nhật thành công bài tập"
+      );
+      fetchGetListExercises();
+    } else if (response.code === 401) {
+      const refresh = await refreshToken();
+      if (refresh.code === 200) {
+        saveToken(refresh.data.token, refresh.data.refreshToken);
+      }
+    } else {
+      openNotification(api, "bottomRight", "Lỗi", "Cập nhật bài tập thất bại");
+    }
+
+    setTimeout(() => {
+      handleCancel();
+    }, 500);
+  };
+
   const createExcerCise = async () => {
     const formData = new FormData();
     const values = { ...form.getFieldsValue() };
+    if(!values.title || !values.type){
+      openNotification(
+        api,
+        "bottomRight",
+        "Lỗi",
+        "Hãy nhập đầy đủ thông tin"
+      );
+      return;
+    }
+    setConfirmLoading(true);
     var exerciseRequest = {
       type: values.type,
       title: values.title,
@@ -261,6 +320,7 @@ function ListFirstTestExcercises() {
   };
 
   const deleteExercise = async () => {
+    setConfirmLoading(true);
     const response = await deleteExerciseOfTest(excercise.id);
     console.log(response);
     if (response.code === 200) {
@@ -306,7 +366,6 @@ function ListFirstTestExcercises() {
   };
 
   const handleOk = () => {
-    setConfirmLoading(true);
     if (ac === "Create") {
       if (
         selected === "LISTENING_1" ||
@@ -348,6 +407,41 @@ function ListFirstTestExcercises() {
 
     if (ac === "Delete") {
       deleteExercise(excercise.id);
+    }
+
+    if (ac === "Update") {
+      if (
+        excercise.typeName === "Bài tập Listening Part 1" ||
+        excercise.typeName === "Bài tập Listening Part 2" ||
+        excercise.typeName === "Bài tập Listening Part 3 và 4"
+      ) {
+        if (audioList.length === 0) {
+          openNotification(
+            api,
+            "bottomRight",
+            "Lỗi",
+            "Bạn chưa chọn file nghe"
+          );
+          return;
+        }
+      }
+
+      if (
+        excercise.typeName === "Bài tập Reading Part 6" ||
+        excercise.typeName === "Bài tập Reading Part 7"
+      ) {
+        if (content.length === 0 || !content) {
+          openNotification(
+            api,
+            "bottomRight",
+            "Lỗi",
+            "Bạn chưa nhập đoạn văn"
+          );
+          return;
+        }
+      }
+
+      updateExcerCise();
     }
   };
   const handleCancel = () => {

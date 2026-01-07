@@ -56,7 +56,7 @@ function CreateSession({ ac, orderIndex, lessonId, handleCancel, moduleId }) {
 
     formData.append("lesson", JSON.stringify(lesson));
 
-    if(sessionData.videoPath1){
+    if (sessionData.videoPath1) {
       console.log("Video: " + sessionData.videoPath1);
       formData.append("videoPath", sessionData.videoPath1);
     }
@@ -219,7 +219,7 @@ function CreateSession({ ac, orderIndex, lessonId, handleCancel, moduleId }) {
     };
   };
 
-  const [videoPathUpdate,setVideoPathUpdate]= useState(null);
+  const [videoPathUpdate, setVideoPathUpdate] = useState(null);
   const [durationUpdate, setDurationUpdate] = useState(0);
   const fetchApiGetLesson = async () => {
     const response = await getLessonAdminTeacher(lessonId);
@@ -319,6 +319,7 @@ function CreateSession({ ac, orderIndex, lessonId, handleCancel, moduleId }) {
     accept: ".mp4",
   };
 
+  const MAX_PDF_SIZE = 10 * 1024;
   const propsDoc = {
     onRemove: () => {
       setDocFile([]);
@@ -328,6 +329,16 @@ function CreateSession({ ac, orderIndex, lessonId, handleCancel, moduleId }) {
     beforeUpload: (file) => {
       if (file.name.split(".").pop().toLowerCase() !== "pdf") {
         openNotification(api, "bottomRight", "Lỗi", "Chỉ chấp nhận PDF");
+        return Upload.LIST_IGNORE;
+      }
+
+      if (file.size > MAX_PDF_SIZE) {
+        openNotification(
+          api,
+          "bottomRight",
+          "Lỗi",
+          "Dung lượng file PDF tối đa là 10 KB"
+        );
         return Upload.LIST_IGNORE;
       }
 
@@ -355,7 +366,7 @@ function CreateSession({ ac, orderIndex, lessonId, handleCancel, moduleId }) {
         durationMinutes: duration,
       };
 
-      if(videoPathUpdate && videoFile.length === 0){
+      if (videoPathUpdate && videoFile.length === 0) {
         updateSession(data);
       }
 
@@ -365,7 +376,7 @@ function CreateSession({ ac, orderIndex, lessonId, handleCancel, moduleId }) {
       // Nếu chưa có videoPath → upload chưa xong → chờ
       if (!videoPath1) {
         pendingSubmitRef.current = true;
-        setTimeout(()=>handleCancel(),1500); // đóng modal nhưng upload vẫn chạy
+        setTimeout(() => handleCancel(), 1500); // đóng modal nhưng upload vẫn chạy
         return;
       }
 

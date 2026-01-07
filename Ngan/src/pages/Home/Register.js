@@ -81,13 +81,13 @@ function Register() {
           <Form form={form} name="register" onFinish={handleRegister}>
             <div className="form__login--item">
               <h4 className="form__login--item--title">Email</h4>
-              <Form.Item name="email" className="form__login--input">
+              <Form.Item name="email" className="form__login--input" rules={[{ required: true, message: "Không được để trống" }]}>
                 <Input disabled={loading} />
               </Form.Item>
             </div>
             <div className="form__login--item">
               <h4 className="form__login--item--title">Họ và tên</h4>
-              <Form.Item name="fullName" className="form__login--input">
+              <Form.Item name="fullName" className="form__login--input" rules={[{ required: true, message: "Không được để trống" }]}>
                 <Input disabled={loading} />
               </Form.Item>
             </div>

@@ -40,7 +40,7 @@ function ForgetPass({ onSuccess }) {
       <Form form={form} name="register" onFinish={handle}>
         <div className="form__login--item">
           <h4 className="form__login--item--title">Email</h4>
-          <Form.Item name="email" className="form__login--input">
+          <Form.Item name="email" className="form__login--input" rules={[{ required: true, message: "Không được để trống" }]}>
             <Input disabled={loading} />
           </Form.Item>
         </div>

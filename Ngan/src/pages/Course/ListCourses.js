@@ -46,7 +46,7 @@ function ListCourses() {
 
   return (
     <>
-      <h2>Danh sách các khóa học</h2>
+      <h1 className="page-title">Danh sách các khóa học</h1>
       <h3>
         Nền tảng TOEIC{" "}
         <PlusCircleTwoTone

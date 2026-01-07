@@ -194,8 +194,11 @@ function ListTeacher() {
   return (
     <>
       {contextHolder}
-      <div className="button__create__teacher">
-        <Button onClick={handleCreateteacher}>Thêm giáo viên</Button>
+      <div className="flex">
+        <h1 className="page-title">Quản lý giáo viên</h1>
+        <div className="button__create__teacher">
+          <Button onClick={handleCreateteacher} type="primary">Thêm giáo viên</Button>
+        </div>
       </div>
 
       <Table columns={columns} dataSource={teachers} />

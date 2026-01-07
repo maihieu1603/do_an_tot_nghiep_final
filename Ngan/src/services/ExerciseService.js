@@ -11,6 +11,11 @@ export const createExerciseOfTeacherLesson = async(data) => {
     return result;
 }
 
+export const updateExerciseOfTeacherLesson = async(data) => {
+    const result = await putFormData(`exercises`, data);
+    return result;
+}
+
 export const createQuestionOfExercise = async(data) => {
     const result = await postFormData(`questions`, data);
     return result;
@@ -43,6 +48,11 @@ export const getListExercisesOfTest = async(id) => {
 
 export const createExerciseOfTest = async(data) => {
     const result = await postFormData(`assessments`, data);
+    return result;
+}
+
+export const updateExerciseOfTest = async(data) => {
+    const result = await putFormData(`assessments`, data);
     return result;
 }
 

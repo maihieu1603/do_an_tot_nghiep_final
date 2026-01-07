@@ -18,7 +18,7 @@ function MenuSiderStudent(props) {
     },
     {
       key: "/student/my_courses",
-      icon: <BookOutlined />,
+      icon: <BookOutlined style={{ color: isStudyPlan ? "white" : undefined }}/>,
       label: (
         <Link
           to="/student/my_courses"

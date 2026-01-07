@@ -96,7 +96,7 @@ function ListTests() {
     <>
       {contextHolder}
       <div className="flex">
-        <h2>Danh sách các bài test</h2>
+        <h1 className="page-title">Danh sách các bài test</h1>
         <Button type="primary" onClick={handleCreateTest}>
           Thêm bài test
         </Button>

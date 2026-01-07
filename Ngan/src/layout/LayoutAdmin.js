@@ -19,14 +19,14 @@ function LayoutAdmin() {
         <Header className="header">
           <HeaderCommon toggleSidebar={toggleSidebar} />
         </Header>
-        <div style={{ display: "flex", flex: 1, marginTop: "60px" }}>
+        <div style={{ display: "flex", flex: 1, marginTop: "60px" }} className="admin">
           <Layout>
             <Sider
-              className="sider"
+              className="sider admin"
               collapsible
               collapsed={collapsed}
               trigger={null}
-              collapsedWidth={60}
+              collapsedWidth={70}
               breakpoint="md"
               onBreakpoint={(broken) => {
                 setCollapsed(broken);
@@ -36,7 +36,7 @@ function LayoutAdmin() {
             </Sider>
             <Content
               className="layout__content"
-              style={collapsed ? { marginLeft: 60 } : { marginLeft: "195px" }}
+              style={collapsed ? { marginLeft: 90, marginBottom: "25px", marginTop: "25px", marginRight: "25px", backgroundColor: "white"} : { marginLeft: "225px",marginBottom: "25px", marginTop: "25px", marginRight: "25px", backgroundColor: "white" }}
             >
               <Outlet />
             </Content>
