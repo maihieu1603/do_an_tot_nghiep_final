@@ -124,6 +124,7 @@ public class ExerciseServiceImpl implements ExerciseService {
             checkExistShowTime(exerciseRequest.getShowTime(), interactiveExercises);
             exerciseEntity.setShowTime(exerciseRequest.getShowTime());
         }
+        exerciseRepository.save(exerciseEntity);
     }
 
     private void checkTimeShowTime(LocalTime showTime, List<MediaAssetEntity> mediaAssetEntities) {
