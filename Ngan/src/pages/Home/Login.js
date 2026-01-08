@@ -27,6 +27,7 @@ function Login() {
     const response = await loginUser(values);
     console.log(response);
     if (response.code === 200) {
+      localStorage.setItem("firstLogin",response.data.firstLogin);
       setAccessToken(response.data.token.trim());
       console.log(getAccessToken());
       setRefreshToken(response.data.refreshToken.trim());

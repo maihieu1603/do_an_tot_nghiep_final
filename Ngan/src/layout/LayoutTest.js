@@ -44,6 +44,7 @@ function LayoutTest() {
     console.log(response);
     if (response.code === 200) {
       fetchLoTrinh();
+      localStorage.setItem("firstLogin",false);
     } else if (response.code === 401) {
       const refresh = await refreshToken();
       if (refresh.code === 200) {

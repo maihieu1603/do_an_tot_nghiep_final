@@ -39,6 +39,7 @@ import HomePage from "../pages/Home/HomePage";
 import ForgetPass from "../pages/Home/ForgetPass";
 import RequireAuth from "./RequireAuth";
 import RequireRole from "./RequireRole";
+import RequireFirstLogin from "./RequireFirstLogin";
 export const routes = [
   {
     path: "/client",
@@ -203,8 +204,13 @@ export const routes = [
             element: <LayoutExcercise />,
           },
           {
-            path: "/test",
-            element: <LayoutTest />,
+            element: <RequireFirstLogin />,
+            children: [
+              {
+                path: "/test",
+                element: <LayoutTest />,
+              },
+            ],
           },
           {
             path: "/minitest",

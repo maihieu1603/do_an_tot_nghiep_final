@@ -212,7 +212,7 @@ function ListFirstTestExcercises() {
     ) {
       exerciseRequest = {
         id: excercise.id,
-        paragraphs: [...content],
+        paragraphs: [content],
       };
     } else {
       exerciseRequest = {
